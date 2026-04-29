@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
-    <title>OMO社区 - 云端作业系统 | 学生上传 教师批改</title>
+    <title>OMO社区 | 学习空间 + 云端作业系统</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
     <style>
@@ -19,7 +19,7 @@
             padding-bottom: 60px;
         }
         .container {
-            max-width: 1200px;
+            max-width: 1400px;
             margin: 30px auto;
             padding: 0 24px;
         }
@@ -37,6 +37,8 @@
             margin-bottom: 18px;
             border-bottom: 2px solid #f0f2f8;
             padding-bottom: 12px;
+            flex-wrap: wrap;
+            gap: 10px;
         }
         .card-title {
             font-size: 1.5rem;
@@ -51,16 +53,97 @@
             cursor: pointer;
             font-weight: 500;
             transition: 0.2s;
+            display: inline-block;
         }
-        .btn:hover { opacity: 0.85; }
+        .btn:hover { opacity: 0.85; transform: scale(0.97);}
         .btn-warning { background: #FF8E53; }
         .btn-danger { background: #e74c3c; }
+        .btn-success { background: #27ae60; }
         input, textarea, select {
             width: 100%;
             padding: 10px 14px;
             border-radius: 20px;
             border: 1px solid #cbd5e1;
             margin: 8px 0;
+        }
+        .stats-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+            gap: 22px;
+            margin-bottom: 40px;
+        }
+        .stat-card {
+            background: white;
+            border-radius: 28px;
+            padding: 20px 18px;
+            display: flex;
+            align-items: center;
+            gap: 18px;
+            box-shadow: 0 6px 14px rgba(0,0,0,0.05);
+        }
+        .stat-icon {
+            width: 58px;
+            height: 58px;
+            background: rgba(74,144,226,0.1);
+            border-radius: 20px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 28px;
+            color: #4A90E2;
+        }
+        .lessons-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(210px, 1fr));
+            gap: 12px;
+            margin-top: 16px;
+            max-height: 380px;
+            overflow-y: auto;
+        }
+        .lesson-item {
+            background: #f9fbfe;
+            border-radius: 20px;
+            padding: 10px 12px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            border: 1px solid #eef2f8;
+        }
+        .complete-lesson-btn {
+            background: #FF8E53;
+            border: none;
+            border-radius: 30px;
+            padding: 4px 12px;
+            font-size: 0.7rem;
+            font-weight: bold;
+            color: white;
+            cursor: pointer;
+        }
+        .badges-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(140px, 1fr));
+            gap: 16px;
+            margin-top: 15px;
+        }
+        .badge-item {
+            background: linear-gradient(145deg, #fff, #f8faff);
+            border-radius: 24px;
+            padding: 16px 8px;
+            text-align: center;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.04);
+        }
+        .credit-log {
+            background: #f9fafc;
+            border-radius: 20px;
+            padding: 12px;
+            margin-bottom: 8px;
+            font-size: 13px;
+        }
+        .two-columns {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 30px;
+            margin-bottom: 30px;
         }
         .homework-item {
             background: #f9fafc;
@@ -69,12 +152,6 @@
             margin-bottom: 16px;
             border-left: 5px solid #4A90E2;
         }
-        .teacher-area {
-            background: #fff9e8;
-            border-radius: 24px;
-            padding: 20px;
-            margin-top: 20px;
-        }
         .flex-between {
             display: flex;
             justify-content: space-between;
@@ -82,14 +159,79 @@
             flex-wrap: wrap;
             gap: 10px;
         }
-        @media (max-width: 700px) {
-            .flex-between { flex-direction: column; align-items: stretch; }
-        }
         .hidden { display: none; }
+        .teacher-area { background: #fff9e8; border-radius: 24px; padding: 20px; margin-top: 20px; }
+        .progress-bar {
+            background: #e9ecef;
+            border-radius: 12px;
+            height: 10px;
+            overflow: hidden;
+            margin: 12px 0;
+        }
+        .progress-fill {
+            background: #4A90E2;
+            height: 100%;
+            border-radius: 12px;
+        }
+        .completed-label {
+            background: #e0f2e9;
+            color: #2c6e3f;
+            padding: 4px 10px;
+            border-radius: 30px;
+            font-size: 0.7rem;
+            font-weight: bold;
+        }
+        @media (max-width: 900px) {
+            .two-columns { grid-template-columns: 1fr; }
+        }
     </style>
 </head>
 <body>
 <div class="container">
+    <!-- 头部欢迎 + 统计卡片（本地学习数据） -->
+    <div class="card" style="background: linear-gradient(135deg, #4A90E2, #6C63FF); color: white; padding: 30px 35px;">
+        <h1>✨ 欢迎，李明轩</h1>
+        <p>线上学习 + 线下实践 | 家校社协同 | 学分银行激励成长</p>
+        <div style="margin-top:12px; font-size:0.9rem; opacity:0.9;">🏆 真实学分记录 · 课程完成度动态更新 · 丰富勋章体系</div>
+    </div>
+
+    <!-- 统计数据 -->
+    <div class="stats-grid" id="statsArea">
+        <div class="stat-card"><div class="stat-icon"><i class="fas fa-project-diagram"></i></div><div><h3 id="projectCount">0</h3><p>作品数</p></div></div>
+        <div class="stat-card"><div class="stat-icon"><i class="fas fa-medal"></i></div><div><h3 id="badgeCount">0</h3><p>勋章获得</p></div></div>
+        <div class="stat-card"><div class="stat-icon"><i class="fas fa-coins"></i></div><div><h3 id="creditAmount">0</h3><p>社区学分</p></div></div>
+        <div class="stat-card"><div class="stat-icon"><i class="fas fa-check-circle"></i></div><div><h3 id="completionRate">0%</h3><p>课程完课率</p></div></div>
+    </div>
+
+    <!-- 两列：左侧课程+学分银行，右侧本地勋章+双轨评价 -->
+    <div class="two-columns">
+        <div class="card">
+            <div class="card-header"><span class="card-title"><i class="fas fa-book-open"></i> 📖 编程课程·双空间学习</span></div>
+            <div id="courseList"></div>
+            <div style="margin-top: 24px; background:#f0f4fc; border-radius: 24px; padding: 16px;">
+                <h4><i class="fas fa-university"></i> 社区学分银行</h4>
+                <div id="creditSummary"></div>
+                <button id="exchangeCreditBtn" class="btn" style="background:#FF6B35; margin-top:12px;">🎁 兑换小奖品 (消耗20学分)</button>
+            </div>
+        </div>
+        <div class="card">
+            <div class="card-header"><span class="card-title"><i class="fas fa-medal"></i> 🏅 勋章墙</span></div>
+            <div id="badgesContainer" class="badges-grid"></div>
+            <div class="card-header" style="margin-top: 20px;"><span class="card-title"><i class="fas fa-comments"></i> 🤝 双轨评价</span></div>
+            <div id="evalArea">
+                <p><strong>教师评价：</strong> <span id="teacherCommentDisplay"></span></p>
+                <textarea id="teacherCommentInput" rows="2" placeholder="教师评语..." style="width:100%"></textarea>
+                <button id="updateTeacherCommentBtn" class="btn">保存评语</button>
+                <hr style="margin: 15px 0;">
+                <p><strong>家长反馈：</strong></p>
+                <div id="parentFeedbackHistory"></div>
+                <textarea id="parentFeedbackInput" rows="2" placeholder="家长观察反馈..."></textarea>
+                <button id="submitParentFeedbackBtn" class="btn">提交反馈</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- 云端作业系统（完全沿用0429.txt的样式与逻辑） -->
     <div class="card">
         <div class="card-header">
             <span class="card-title"><i class="fas fa-cloud-upload-alt"></i> 学生作业提交</span>
@@ -127,16 +269,154 @@
 </div>
 
 <script>
-    // ================= 已替换为您的 Supabase 配置 =================
+    // ================= 1. Supabase 配置（与0429.txt一致） =================
     const SUPABASE_URL = 'https://paoounfqmdaadrtvbhcb.supabase.co';
     const SUPABASE_ANON_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InBhb291bmZxbWRhYWRydHZiaGNiIiwicm9sZSI6ImFub24iLCJpYXQiOjE3Nzc0NTQ2MTMsImV4cCI6MjA5MzAzMDYxM30.J38Q6zjEYE5P3lYagCike0N7MO-l9PXNcYlZMk9_ey4';
-    // =================================================================
-
     const supabase = window.supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
-
-    // 教师密码（可自行修改）
     const TEACHER_PASSWORD = 'teacher123';
 
+    // ================= 2. 本地学习空间数据（课程+学分+勋章+评价） =================
+    const FULL_LESSONS = [
+        "01-海底世界", "02-恐龙乐园", "03-奔跑的哨子", "04-排队的虫子", "05-鲨鱼特效",
+        "06-山地足球", "07-保卫小鸡", "08-迷宫游戏", "09-七彩钢琴", "10-长江索道",
+        "11-打砖块", "12-聪明的虫子", "13-飞天小猫", "14-魔术表演", "15-神笔马良",
+        "16-听音识路", "17-冒险之旅", "18-豆豆哥吃害虫", "19-小鸟与瓶子", "20-happy new year",
+        "21-飞机大战", "22-玩转金箍棒", "23-青蛙过河记"
+    ];
+    const COURSE_TITLE = "社区少儿编程项目课程";
+
+    let appState = {
+        credits: 0,
+        creditLogs: [],
+        courses: [{
+            id: 1,
+            title: COURSE_TITLE,
+            lessons: [...FULL_LESSONS],
+            completedLessonStatus: new Array(FULL_LESSONS.length).fill(false),
+            completedLessons: 0
+        }],
+        teacherComment: "期待你的进步！",
+        parentFeedbackList: []
+    };
+
+    function loadLocalState() {
+        const saved = localStorage.getItem("omo_learning_state");
+        if (saved) {
+            try {
+                const parsed = JSON.parse(saved);
+                appState = { ...appState, ...parsed };
+                if (!appState.creditLogs) appState.creditLogs = [];
+                if (!appState.parentFeedbackList) appState.parentFeedbackList = [];
+                if (!appState.courses) appState.courses = [{
+                    id: 1, title: COURSE_TITLE, lessons: [...FULL_LESSONS],
+                    completedLessonStatus: new Array(FULL_LESSONS.length).fill(false), completedLessons: 0
+                }];
+                const course = appState.courses[0];
+                if (course.lessons.length !== FULL_LESSONS.length) course.lessons = [...FULL_LESSONS];
+                if (!course.completedLessonStatus || course.completedLessonStatus.length !== FULL_LESSONS.length) {
+                    course.completedLessonStatus = new Array(FULL_LESSONS.length).fill(false);
+                    course.completedLessons = 0;
+                } else {
+                    course.completedLessons = course.completedLessonStatus.filter(v=>v).length;
+                }
+            } catch(e) {}
+        }
+        saveLocalState();
+        renderLocalUI();
+    }
+    function saveLocalState() {
+        localStorage.setItem("omo_learning_state", JSON.stringify(appState));
+    }
+    function addLocalCredits(delta, reason) {
+        appState.credits += delta;
+        appState.creditLogs.unshift({ reason, delta, date: new Date().toISOString() });
+        saveLocalState();
+        renderLocalUI();
+    }
+    function completeLocalLesson(lessonIndex, lessonName) {
+        const course = appState.courses[0];
+        if (course.completedLessonStatus[lessonIndex]) return;
+        course.completedLessonStatus[lessonIndex] = true;
+        course.completedLessons = course.completedLessonStatus.filter(v=>v).length;
+        saveLocalState();
+        addLocalCredits(5, `📖 完成课时「${lessonName}」 (课程：${COURSE_TITLE})`);
+        alert(`完成「${lessonName}」！获得5学分。`);
+    }
+
+    // 本地勋章计算
+    async function computeLocalBadges() {
+        let completed = appState.courses[0].completedLessons;
+        let credits = appState.credits;
+        let badges = [];
+        if (completed >= 1) badges.push({ name: "启程者", icon: "🚀", desc: "完成第1课时" });
+        if (completed >= 5) badges.push({ name: "初级代码师", icon: "👨‍💻", desc: "完成5课时" });
+        if (completed >= 12) badges.push({ name: "进阶编码家", icon: "⚙️", desc: "完成12课时" });
+        if (completed >= 23) badges.push({ name: "全课程大师", icon: "🏅", desc: "完成全部23课时" });
+        if (credits >= 50) badges.push({ name: "学分小管家", icon: "💰", desc: "累计50学分" });
+        if (credits >= 100) badges.push({ name: "理财之星", icon: "💵", desc: "累计100学分" });
+        if (appState.creditLogs.length >= 5) badges.push({ name: "活跃之星", icon: "⭐", desc: "获得5次学分" });
+        if (badges.length === 0) badges.push({ name: "努力新星", icon: "🌟", desc: "开始学习吧" });
+        return badges;
+    }
+
+    async function renderLocalUI() {
+        const course = appState.courses[0];
+        const total = course.lessons.length;
+        const completed = course.completedLessons;
+        const rate = total===0?0:Math.round((completed/total)*100);
+        document.getElementById("completionRate").innerText = rate+"%";
+        document.getElementById("creditAmount").innerText = appState.credits;
+        // 作品数暂时用本地存储模拟（简化，不强制依赖IndexedDB）
+        document.getElementById("projectCount").innerText = "0";
+        const badgesList = await computeLocalBadges();
+        document.getElementById("badgeCount").innerText = badgesList.length;
+
+        // 课程网格
+        let html = `<div><strong>${course.title}</strong><div class="progress-bar"><div class="progress-fill" style="width:${rate}%;"></div></div><div>进度: ${completed}/${total}</div></div><div class="lessons-grid">`;
+        course.lessons.forEach((name, idx) => {
+            if (course.completedLessonStatus[idx]) {
+                html += `<div class="lesson-item"><span>✅ ${name}</span><span class="completed-label">已完成</span></div>`;
+            } else {
+                html += `<div class="lesson-item"><span>📘 ${name}</span><button class="complete-lesson-btn" data-idx="${idx}" data-name="${name}">完成</button></div>`;
+            }
+        });
+        html += `</div>`;
+        document.getElementById("courseList").innerHTML = html;
+        document.querySelectorAll(".complete-lesson-btn").forEach(btn => {
+            btn.addEventListener("click", (e) => {
+                let idx = parseInt(btn.dataset.idx);
+                let name = btn.dataset.name;
+                completeLocalLesson(idx, name);
+            });
+        });
+
+        // 学分银行
+        let creditHtml = `<div><strong>当前学分: ${appState.credits}</strong></div><div style="max-height:150px; overflow:auto;">`;
+        appState.creditLogs.slice(0,5).forEach(log => { creditHtml += `<div class="credit-log">${new Date(log.date).toLocaleString()} — ${log.reason}</div>`; });
+        creditHtml += `</div>`;
+        document.getElementById("creditSummary").innerHTML = creditHtml;
+
+        // 勋章墙
+        let badgeHtml = "";
+        badgesList.forEach(b => { badgeHtml += `<div class="badge-item"><div style="font-size:36px;">${b.icon}</div><div>${b.name}</div><small>${b.desc}</small></div>`; });
+        document.getElementById("badgesContainer").innerHTML = badgeHtml;
+
+        // 双轨评价
+        document.getElementById("teacherCommentDisplay").innerText = appState.teacherComment;
+        document.getElementById("teacherCommentInput").value = appState.teacherComment;
+        let parentHtml = appState.parentFeedbackList.map(p => `<div>📝 ${p.date}: ${p.text}</div>`).join("");
+        document.getElementById("parentFeedbackHistory").innerHTML = parentHtml || "暂无反馈";
+        document.getElementById("updateTeacherCommentBtn").onclick = () => { appState.teacherComment = document.getElementById("teacherCommentInput").value; saveLocalState(); renderLocalUI(); alert("已保存"); };
+        document.getElementById("submitParentFeedbackBtn").onclick = () => {
+            let text = document.getElementById("parentFeedbackInput").value.trim();
+            if(text) { appState.parentFeedbackList.unshift({ text, date: new Date().toLocaleString() }); saveLocalState(); renderLocalUI(); document.getElementById("parentFeedbackInput").value = ""; alert("感谢反馈"); }
+        };
+        document.getElementById("exchangeCreditBtn").onclick = () => {
+            if(appState.credits >= 20) { addLocalCredits(-20, "兑换小礼品"); alert("兑换成功"); } else alert("学分不足20");
+        };
+    }
+
+    // ================= 3. 云端作业系统（完全沿用0429.txt逻辑） =================
     const assignments = {
         a1: { title: "垃圾分类小助手", desc: "制作垃圾分类互动动画" },
         a2: { title: "迷宫游戏", desc: "角色从起点到终点，增加计时器" }
@@ -303,6 +583,9 @@
             return m;
         });
     }
+
+    // 启动所有模块
+    loadLocalState();
 </script>
 </body>
 </html>
