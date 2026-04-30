@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
-    <title>OMO社区 | 学习空间 + 云端作业系统</title>
+    <title>OMO社区 | 学习空间 + 云端作业系统 - 完整23课</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
     <style>
@@ -11,7 +11,7 @@
             margin: 0;
             padding: 0;
             box-sizing: border-box;
-            font-family: 'Inter', system-ui, sans-serif;
+            font-family: 'Inter', system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
         }
         body {
             background: linear-gradient(145deg, #eef2f9 0%, #dce5f0 100%);
@@ -29,6 +29,7 @@
             padding: 26px;
             margin-bottom: 30px;
             box-shadow: 0 8px 24px rgba(0,0,0,0.06);
+            transition: all 0.2s;
         }
         .card-header {
             display: flex;
@@ -54,6 +55,7 @@
             font-weight: 500;
             transition: 0.2s;
             display: inline-block;
+            font-size: 0.9rem;
         }
         .btn:hover { opacity: 0.85; transform: scale(0.97);}
         .btn-warning { background: #FF8E53; }
@@ -94,38 +96,44 @@
         }
         .lessons-grid {
             display: grid;
-            grid-template-columns: repeat(auto-fill, minmax(240px, 1fr));
-            gap: 12px;
-            margin-top: 16px;
-            max-height: 450px;
+            grid-template-columns: repeat(auto-fill, minmax(260px, 1fr));
+            gap: 14px;
+            margin-top: 20px;
+            max-height: 520px;
             overflow-y: auto;
             border: 1px solid #eef2f8;
             border-radius: 24px;
-            padding: 16px;
+            padding: 20px;
             background: #ffffff;
         }
         .lesson-item {
             background: #f9fbfe;
-            border-radius: 20px;
-            padding: 12px 16px;
+            border-radius: 24px;
+            padding: 14px 18px;
             display: flex;
             justify-content: space-between;
             align-items: center;
             border: 1px solid #eef2f8;
             transition: 0.1s;
+            box-shadow: 0 1px 2px rgba(0,0,0,0.02);
         }
         .lesson-item:hover {
             background: #f0f4ff;
+            transform: translateY(-1px);
         }
         .complete-lesson-btn {
             background: #FF8E53;
             border: none;
             border-radius: 30px;
-            padding: 6px 16px;
+            padding: 6px 18px;
             font-size: 0.75rem;
             font-weight: bold;
             color: white;
             cursor: pointer;
+            transition: 0.1s;
+        }
+        .complete-lesson-btn:hover {
+            background: #e57c3e;
         }
         .badges-grid {
             display: grid;
@@ -184,13 +192,28 @@
         .completed-label {
             background: #e0f2e9;
             color: #2c6e3f;
-            padding: 4px 10px;
+            padding: 4px 12px;
             border-radius: 30px;
             font-size: 0.7rem;
             font-weight: bold;
         }
+        .course-header-info {
+            margin-bottom: 12px;
+        }
         @media (max-width: 900px) {
             .two-columns { grid-template-columns: 1fr; }
+            .lessons-grid { grid-template-columns: 1fr; max-height: 400px; }
+        }
+        .lesson-number {
+            font-weight: 500;
+            background: #eef2ff;
+            padding: 2px 10px;
+            border-radius: 20px;
+            font-size: 0.7rem;
+            margin-right: 8px;
+        }
+        .credit-exchange-btn {
+            background: #f39c12;
         }
     </style>
 </head>
@@ -199,8 +222,8 @@
     <!-- 欢迎横幅 -->
     <div class="card" style="background: linear-gradient(135deg, #4A90E2, #6C63FF); color: white; padding: 30px 35px;">
         <h1>✨ 欢迎，同学</h1>
-        <p>线上学习 + 线下实践 | 家校社协同 | 学分银行激励成长</p>
-        <div style="margin-top:12px; font-size:0.9rem; opacity:0.9;">🏆 真实学分记录 · 课程完成度动态更新 · 丰富勋章体系</div>
+        <p>线上学习 + 线下实践 | 家校社协同 | 学分银行激励成长 | 完整23节编程课时</p>
+        <div style="margin-top:12px; font-size:0.9rem; opacity:0.9;">🏆 真实学分记录 · 课程完成度动态更新 · 丰富勋章体系 · 每完成一课时+5学分</div>
     </div>
 
     <!-- 统计卡片 -->
@@ -214,29 +237,29 @@
     <!-- 两列布局 -->
     <div class="two-columns">
         <div class="card">
-            <div class="card-header"><span class="card-title"><i class="fas fa-book-open"></i> 📖 编程课程·双空间学习</span></div>
+            <div class="card-header"><span class="card-title"><i class="fas fa-book-open"></i> 📖 编程课程·双空间学习 (共23课)</span></div>
             <div id="courseListContainer">
                 <div id="courseList" style="min-height: 200px;"></div>
             </div>
-            <div style="margin-top: 24px; background:#f0f4fc; border-radius: 24px; padding: 16px;">
+            <div style="margin-top: 24px; background:#f0f4fc; border-radius: 24px; padding: 18px;">
                 <h4><i class="fas fa-university"></i> 社区学分银行</h4>
                 <div id="creditSummary"></div>
-                <button id="exchangeCreditBtn" class="btn" style="background:#FF6B35; margin-top:12px;">🎁 兑换小奖品 (消耗20学分)</button>
+                <button id="exchangeCreditBtn" class="btn credit-exchange-btn" style="background:#FF6B35; margin-top:12px;"><i class="fas fa-gift"></i> 兑换小奖品 (消耗20学分)</button>
             </div>
         </div>
         <div class="card">
             <div class="card-header"><span class="card-title"><i class="fas fa-medal"></i> 🏅 勋章墙</span></div>
             <div id="badgesContainer" class="badges-grid"></div>
-            <div class="card-header" style="margin-top: 20px;"><span class="card-title"><i class="fas fa-comments"></i> 🤝 双轨评价</span></div>
+            <div class="card-header" style="margin-top: 20px;"><span class="card-title"><i class="fas fa-comments"></i> 🤝 双轨评价 (教师·家长)</span></div>
             <div id="evalArea">
-                <p><strong>教师评价：</strong> <span id="teacherCommentDisplay"></span></p>
+                <p><strong><i class="fas fa-chalkboard-teacher"></i> 教师评价：</strong> <span id="teacherCommentDisplay"></span></p>
                 <textarea id="teacherCommentInput" rows="2" placeholder="教师评语..."></textarea>
-                <button id="updateTeacherCommentBtn" class="btn">保存评语</button>
+                <button id="updateTeacherCommentBtn" class="btn" style="background:#4A90E2;">保存评语</button>
                 <hr style="margin: 15px 0;">
-                <p><strong>家长反馈：</strong></p>
+                <p><strong><i class="fas fa-family"></i> 家长反馈：</strong></p>
                 <div id="parentFeedbackHistory"></div>
                 <textarea id="parentFeedbackInput" rows="2" placeholder="家长观察反馈..."></textarea>
-                <button id="submitParentFeedbackBtn" class="btn">提交反馈</button>
+                <button id="submitParentFeedbackBtn" class="btn" style="background:#27ae60;">提交反馈</button>
             </div>
         </div>
     </div>
@@ -244,7 +267,7 @@
     <!-- 云端作业系统 -->
     <div class="card">
         <div class="card-header">
-            <span class="card-title"><i class="fas fa-cloud-upload-alt"></i> 学生作业提交</span>
+            <span class="card-title"><i class="fas fa-cloud-upload-alt"></i> 学生作业提交 (Scratch .sb3)</span>
             <button id="teacherModeBtn" class="btn btn-warning"><i class="fas fa-chalkboard-teacher"></i> 教师批改模式</button>
         </div>
         <div id="studentArea">
@@ -269,8 +292,8 @@
     const SUPABASE_ANON_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InBhb291bmZxbWRhYWRydHZiaGNiIiwicm9sZSI6ImFub24iLCJpYXQiOjE3Nzc0NTQ2MTMsImV4cCI6MjA5MzAzMDYxM30.J38Q6zjEYE5P3lYagCike0N7MO-l9PXNcYlZMk9_ey4';
     const supabase = window.supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
     const TEACHER_PASSWORD = 'teacher123';
-
-    // ================= 2. 本地学习数据 =================
+    
+    // 确保23节课程完整显示 (硬编码严格按照需求展示)
     const FULL_LESSONS = [
         "01-海底世界", "02-恐龙乐园", "03-奔跑的哨子", "04-排队的虫子", "05-鲨鱼特效",
         "06-山地足球", "07-保卫小鸡", "08-迷宫游戏", "09-七彩钢琴", "10-长江索道",
@@ -278,7 +301,7 @@
         "16-听音识路", "17-冒险之旅", "18-豆豆哥吃害虫", "19-小鸟与瓶子", "20-happy new year",
         "21-飞机大战", "22-玩转金箍棒", "23-青蛙过河记"
     ];
-    const COURSE_TITLE = "社区少儿编程项目课程";
+    const COURSE_TITLE = "社区少儿编程项目课程（23课时）";
 
     let appState = {
         credits: 0,
@@ -290,9 +313,40 @@
             completedLessonStatus: new Array(FULL_LESSONS.length).fill(false),
             completedLessons: 0
         }],
-        teacherComment: "期待你的进步！",
+        teacherComment: "期待你的进步！继续保持编程热情～",
         parentFeedbackList: []
     };
+
+    // 强制重置确保课程完整显示（若本地存储损坏或缺失则重建）
+    function ensureFullLessons() {
+        const course = appState.courses[0];
+        if (!course || course.lessons.length !== FULL_LESSONS.length) {
+            appState.courses = [{
+                id: 1,
+                title: COURSE_TITLE,
+                lessons: [...FULL_LESSONS],
+                completedLessonStatus: new Array(FULL_LESSONS.length).fill(false),
+                completedLessons: 0
+            }];
+        } else {
+            // 确保状态数组长度一致
+            if (!course.completedLessonStatus || course.completedLessonStatus.length !== FULL_LESSONS.length) {
+                const oldStatus = course.completedLessonStatus || [];
+                const newStatus = new Array(FULL_LESSONS.length).fill(false);
+                for (let i = 0; i < Math.min(oldStatus.length, FULL_LESSONS.length); i++) {
+                    if (oldStatus[i]) newStatus[i] = true;
+                }
+                course.completedLessonStatus = newStatus;
+                course.completedLessons = newStatus.filter(v=>v).length;
+                course.lessons = [...FULL_LESSONS];
+                course.title = COURSE_TITLE;
+            }
+        }
+        if (!appState.creditLogs) appState.creditLogs = [];
+        if (!appState.parentFeedbackList) appState.parentFeedbackList = [];
+        if (typeof appState.teacherComment !== 'string') appState.teacherComment = "期待你的进步！继续保持编程热情～";
+        saveLocalState();
+    }
 
     function loadLocalState() {
         const saved = localStorage.getItem("omo_learning_state");
@@ -302,22 +356,15 @@
                 appState = { ...appState, ...parsed };
                 if (!appState.creditLogs) appState.creditLogs = [];
                 if (!appState.parentFeedbackList) appState.parentFeedbackList = [];
-                if (!appState.courses) {
+                if (!appState.courses || appState.courses.length === 0) {
                     appState.courses = [{
                         id: 1, title: COURSE_TITLE, lessons: [...FULL_LESSONS],
                         completedLessonStatus: new Array(FULL_LESSONS.length).fill(false), completedLessons: 0
                     }];
                 }
-                const course = appState.courses[0];
-                if (course.lessons.length !== FULL_LESSONS.length) course.lessons = [...FULL_LESSONS];
-                if (!course.completedLessonStatus || course.completedLessonStatus.length !== FULL_LESSONS.length) {
-                    course.completedLessonStatus = new Array(FULL_LESSONS.length).fill(false);
-                    course.completedLessons = 0;
-                } else {
-                    course.completedLessons = course.completedLessonStatus.filter(v=>v).length;
-                }
             } catch(e) { console.error(e); }
         }
+        ensureFullLessons();       // 确保永远显示23课
         saveLocalState();
         renderLocalUI();
     }
@@ -327,7 +374,7 @@
     }
 
     function addLocalCredits(delta, reason) {
-        appState.credits += delta;
+        appState.credits = Math.max(0, appState.credits + delta);
         appState.creditLogs.unshift({ reason, delta, date: new Date().toISOString() });
         saveLocalState();
         renderLocalUI();
@@ -335,19 +382,21 @@
 
     function completeLocalLesson(lessonIndex, lessonName) {
         const course = appState.courses[0];
+        if (lessonIndex < 0 || lessonIndex >= FULL_LESSONS.length) return;
         if (course.completedLessonStatus[lessonIndex]) {
-            alert("该课时已完成，请勿重复提交");
+            alert("⚠️ 该课时已完成，请勿重复提交");
             return;
         }
         course.completedLessonStatus[lessonIndex] = true;
         course.completedLessons = course.completedLessonStatus.filter(v=>v).length;
         saveLocalState();
         addLocalCredits(5, `📖 完成课时「${lessonName}」 (课程：${COURSE_TITLE})`);
-        alert(`🎉 完成「${lessonName}」！获得 5 学分`);
+        alert(`🎉 恭喜完成「${lessonName}」！获得 5 学分，继续加油！`);
+        renderLocalUI();
     }
 
     async function computeLocalBadges() {
-        let completed = appState.courses[0].completedLessons;
+        let completed = appState.courses[0]?.completedLessons || 0;
         let credits = appState.credits;
         let badges = [];
         if (completed >= 1) badges.push({ name: "启程者", icon: "🚀", desc: "完成第1课时" });
@@ -364,23 +413,31 @@
 
     async function renderLocalUI() {
         const course = appState.courses[0];
+        if (!course || course.lessons.length !== FULL_LESSONS.length) {
+            ensureFullLessons();
+            return renderLocalUI();
+        }
         const total = course.lessons.length;
         const completed = course.completedLessons;
-        const rate = total === 0 ? 0 : Math.round((completed / total) * 100);
+        const rate = total === 0 ? 0 : Math.floor((completed / total) * 100);
         document.getElementById("completionRate").innerText = rate + "%";
         document.getElementById("creditAmount").innerText = appState.credits;
-        document.getElementById("projectCount").innerText = "0"; // 可后续扩展
+        document.getElementById("projectCount").innerText = "0"; // 可扩展作品集
 
         const badgesList = await computeLocalBadges();
         document.getElementById("badgeCount").innerText = badgesList.length;
 
-        // 渲染课程列表
-        let html = `<div><strong>${course.title}</strong><div class="progress-bar"><div class="progress-fill" style="width:${rate}%;"></div></div><div>总进度: ${completed}/${total} 课时</div><div style="margin-top:8px; font-size:0.75rem; color:#2c6e9f;">✨ 每完成一课时 +5 学分，学分银行自动记录</div></div><div class="lessons-grid">`;
+        // 渲染课程列表 - 完整23节课程强制展示
+        let html = `<div class="course-header-info"><strong>${course.title}</strong><div class="progress-bar"><div class="progress-fill" style="width:${rate}%;"></div></div><div>📊 总进度: ${completed}/${total} 课时 &nbsp;&nbsp;🏆 完课率 ${rate}%</div><div style="margin-top:8px; font-size:0.75rem; color:#2c6e9f;"><i class="fas fa-info-circle"></i> 每完成一课时 +5 学分，学分银行自动记录，集学分赢勋章</div></div><div class="lessons-grid">`;
+        
         course.lessons.forEach((name, idx) => {
-            if (course.completedLessonStatus[idx]) {
-                html += `<div class="lesson-item"><span>✅ ${name}</span><span class="completed-label">已完成</span></div>`;
+            const isCompleted = course.completedLessonStatus[idx];
+            // 显示序号 + 课程名，更清晰
+            const lessonNumber = (idx+1).toString().padStart(2,'0');
+            if (isCompleted) {
+                html += `<div class="lesson-item"><div><span class="lesson-number">✅ ${lessonNumber}</span> <strong>${name}</strong></div><span class="completed-label"><i class="fas fa-check-circle"></i> 已完成</span></div>`;
             } else {
-                html += `<div class="lesson-item"><span>📘 ${name}</span><button class="complete-lesson-btn" data-idx="${idx}" data-name="${name}">完成</button></div>`;
+                html += `<div class="lesson-item"><div><span class="lesson-number">📘 ${lessonNumber}</span> <strong>${name}</strong></div><button class="complete-lesson-btn" data-idx="${idx}" data-name="${name}"><i class="fas fa-check"></i> 完成本课</button></div>`;
             }
         });
         html += `</div>`;
@@ -391,47 +448,62 @@
             console.error("courseList element not found");
         }
 
-        // 绑定完成按钮事件
-        document.querySelectorAll(".complete-lesson-btn").forEach(btn => {
-            btn.removeEventListener("click", window._lessonClickHandler);
-            const handler = (e) => {
-                const idx = parseInt(btn.dataset.idx);
-                const name = btn.dataset.name;
-                completeLocalLesson(idx, name);
-            };
-            btn.addEventListener("click", handler);
-            window._lessonClickHandler = handler;
-        });
+        // 绑定完成按钮事件 (使用事件委托避免重复绑定)
+        if (courseListDiv) {
+            courseListDiv.querySelectorAll(".complete-lesson-btn").forEach(btn => {
+                btn.removeEventListener("click", window._dynamicLessonClick);
+                const handler = (e) => {
+                    e.stopPropagation();
+                    const idx = parseInt(btn.dataset.idx);
+                    const name = btn.dataset.name;
+                    if (!isNaN(idx)) completeLocalLesson(idx, name);
+                };
+                btn.addEventListener("click", handler);
+                window._dynamicLessonClick = handler;
+            });
+        }
 
-        // 学分银行
-        let creditHtml = `<div><strong>当前学分: ${appState.credits}</strong></div><div style="max-height:150px; overflow:auto;">`;
-        appState.creditLogs.slice(0, 5).forEach(log => {
-            creditHtml += `<div class="credit-log">${new Date(log.date).toLocaleString()} — ${log.reason}</div>`;
+        // 学分银行渲染
+        let creditHtml = `<div style="font-weight:bold; margin-bottom:8px;">💰 当前学分: ${appState.credits}</div><div style="max-height:150px; overflow:auto;">`;
+        if (appState.creditLogs.length === 0) creditHtml += `<div class="credit-log">✨ 暂无记录，完成课程即可获得学分~</div>`;
+        appState.creditLogs.slice(0, 6).forEach(log => {
+            creditHtml += `<div class="credit-log"><i class="fas fa-coins"></i> ${new Date(log.date).toLocaleString()} — ${log.reason} ${log.delta > 0 ? `+${log.delta}` : `${log.delta}`}</div>`;
         });
         creditHtml += `</div>`;
         document.getElementById("creditSummary").innerHTML = creditHtml;
 
         // 勋章墙
         let badgeHtml = "";
-        badgesList.forEach(b => {
-            badgeHtml += `<div class="badge-item"><div style="font-size:36px;">${b.icon}</div><div>${b.name}</div><small>${b.desc}</small></div>`;
-        });
+        if (badgesList.length) {
+            badgesList.forEach(b => {
+                badgeHtml += `<div class="badge-item"><div style="font-size:36px;">${b.icon}</div><div><b>${b.name}</b></div><small>${b.desc}</small></div>`;
+            });
+        } else {
+            badgeHtml = `<div class="badge-item">✨ 努力学习获得勋章吧</div>`;
+        }
         document.getElementById("badgesContainer").innerHTML = badgeHtml;
 
         // 双轨评价
-        document.getElementById("teacherCommentDisplay").innerText = appState.teacherComment;
+        document.getElementById("teacherCommentDisplay").innerText = appState.teacherComment || "暂无教师评语";
         document.getElementById("teacherCommentInput").value = appState.teacherComment;
-        let parentHtml = appState.parentFeedbackList.map(p => `<div>📝 ${p.date}: ${p.text}</div>`).join("");
-        document.getElementById("parentFeedbackHistory").innerHTML = parentHtml || "暂无反馈";
+        let parentHtml = "";
+        if (appState.parentFeedbackList && appState.parentFeedbackList.length) {
+            parentHtml = appState.parentFeedbackList.map(p => `<div class="credit-log"><i class="fas fa-user-check"></i> ${p.date}: ${p.text}</div>`).join("");
+        } else {
+            parentHtml = "<div style='color:#6c757d;'>暂无家长反馈，欢迎家长留下宝贵意见~</div>";
+        }
+        document.getElementById("parentFeedbackHistory").innerHTML = parentHtml;
     }
 
-    // 绑定双轨评价按钮事件（避免重复绑定）
+    // 绑定双轨评价按钮及学分兑换
     function bindEvalButtons() {
         const updateBtn = document.getElementById("updateTeacherCommentBtn");
         const submitFeedbackBtn = document.getElementById("submitParentFeedbackBtn");
         const exchangeBtn = document.getElementById("exchangeCreditBtn");
         if (updateBtn) updateBtn.onclick = () => {
-            appState.teacherComment = document.getElementById("teacherCommentInput").value;
+            const newComment = document.getElementById("teacherCommentInput").value.trim();
+            if (newComment) appState.teacherComment = newComment;
+            else appState.teacherComment = "(未填写评语)";
             saveLocalState();
             renderLocalUI();
             alert("教师评语已保存");
@@ -443,22 +515,22 @@
                 saveLocalState();
                 renderLocalUI();
                 document.getElementById("parentFeedbackInput").value = "";
-                alert("感谢您的反馈");
+                alert("感谢您的反馈，家校共育助力成长！");
             } else {
                 alert("请填写反馈内容");
             }
         };
         if (exchangeBtn) exchangeBtn.onclick = () => {
             if (appState.credits >= 20) {
-                addLocalCredits(-20, "兑换小礼品");
-                alert("兑换成功！可联系社区领取奖品。");
+                addLocalCredits(-20, "🎁 兑换社区小礼品 (文具/贴纸)");
+                alert("兑换成功！请前往社区服务中心领取奖品。");
             } else {
-                alert("学分不足20，请继续完成课程。");
+                alert("学分不足20，请继续完成课程获取学分～");
             }
         };
     }
 
-    // ================= 3. 云端作业系统 =================
+    // ================= 云端作业系统部分 =================
     const assignments = { a1: { title: "垃圾分类小助手" }, a2: { title: "迷宫游戏" } };
     const studentAreaDiv = document.getElementById('studentArea');
     const teacherAreaDiv = document.getElementById('teacherArea');
@@ -488,14 +560,14 @@
     };
 
     async function loadAllHomeworks() {
-        homeworkListDiv.innerHTML = '<div class="teacher-area">加载中...</div>';
+        homeworkListDiv.innerHTML = '<div class="teacher-area">📡 加载作业列表中...</div>';
         const { data, error } = await supabase.from('homeworks').select('*').order('upload_time', { ascending: false });
         if (error) {
-            homeworkListDiv.innerHTML = `<div class="teacher-area">❌ 加载失败: ${error.message}</div>`;
+            homeworkListDiv.innerHTML = `<div class="teacher-area">❌ 加载失败: ${error.message}，请检查网络或Supabase配置。</div>`;
             return;
         }
         if (!data || data.length === 0) {
-            homeworkListDiv.innerHTML = '<div class="teacher-area">📭 暂无学生提交作业</div>';
+            homeworkListDiv.innerHTML = '<div class="teacher-area">📭 暂无学生提交作业，鼓励学生上传.sb3作品~</div>';
             return;
         }
         let html = '';
@@ -503,17 +575,17 @@
             html += `
                 <div class="homework-item" data-id="${hw.id}">
                     <div class="flex-between">
-                        <div><strong>${escapeHtml(hw.student_name)}</strong> 提交了 <strong>${escapeHtml(hw.assignment_title)}</strong></div>
-                        <div>${new Date(hw.upload_time).toLocaleString()}</div>
+                        <div><strong><i class="fas fa-user-graduate"></i> ${escapeHtml(hw.student_name)}</strong> 提交了 <strong>「${escapeHtml(hw.assignment_title)}」</strong></div>
+                        <div><i class="far fa-calendar-alt"></i> ${new Date(hw.upload_time).toLocaleString()}</div>
                     </div>
-                    <div>📄 文件: ${escapeHtml(hw.file_name)}</div>
-                    <div><a href="${hw.file_url}" target="_blank" class="btn" style="background:#2c3e50; display:inline-block;">⬇️ 下载文件</a></div>
+                    <div>📄 文件名: ${escapeHtml(hw.file_name)}</div>
+                    <div><a href="${hw.file_url}" target="_blank" class="btn" style="background:#2c3e50; padding:6px 16px; display:inline-block;"><i class="fas fa-download"></i> 下载作品</a></div>
                     <div style="margin-top:12px;">
-                        <label>评分 (0-100): </label>
+                        <label>📊 评分 (0-100): </label>
                         <input type="number" id="score_${hw.id}" value="${hw.score !== null ? hw.score : ''}" style="width:100px; display:inline; margin-right:12px;">
-                        <label>教师评语: </label>
-                        <input type="text" id="feedback_${hw.id}" value="${escapeHtml(hw.feedback || '')}" style="width:250px; display:inline;">
-                        <button class="btn save-grade-btn" data-id="${hw.id}" style="background:#27ae60;">💾 保存评分</button>
+                        <label>✍️ 教师评语: </label>
+                        <input type="text" id="feedback_${hw.id}" value="${escapeHtml(hw.feedback || '')}" style="width:260px; display:inline;">
+                        <button class="btn save-grade-btn" data-id="${hw.id}" style="background:#27ae60; margin-left:8px;">💾 保存</button>
                     </div>
                 </div>
             `;
@@ -524,22 +596,22 @@
                 const id = parseInt(btn.dataset.id);
                 const score = document.getElementById(`score_${id}`).value;
                 const feedback = document.getElementById(`feedback_${id}`).value;
-                const pwd = prompt('请输入教师密码以确认修改：');
-                if (pwd !== TEACHER_PASSWORD) { alert('密码错误'); return; }
+                const pwd = prompt('教师权限验证：输入密码以保存评分');
+                if (pwd !== TEACHER_PASSWORD) { alert('密码错误，保存失败'); return; }
                 const { error } = await supabase.from('homeworks').update({ score: score ? parseInt(score) : null, feedback }).eq('id', id);
                 if (error) alert('保存失败: ' + error.message);
-                else { alert('已保存'); loadAllHomeworks(); }
+                else { alert('评分与评语已更新'); loadAllHomeworks(); }
             });
         });
     }
 
     submitBtn.onclick = async () => {
         const studentName = studentNameInput.value.trim();
-        if (!studentName) { studentMsgDiv.innerHTML = '<span style="color:red;">请填写姓名</span>'; return; }
+        if (!studentName) { studentMsgDiv.innerHTML = '<span style="color:red;">请填写真实姓名</span>'; return; }
         const file = fileInput.files[0];
-        if (!file || !file.name.endsWith('.sb3')) { studentMsgDiv.innerHTML = '<span style="color:red;">请选择 .sb3 文件</span>'; return; }
+        if (!file || !file.name.endsWith('.sb3')) { studentMsgDiv.innerHTML = '<span style="color:red;">请选择有效的 Scratch (.sb3) 文件</span>'; return; }
         const assignmentTitle = assignments[assignmentSelect.value].title;
-        const fileName = `${Date.now()}_${studentName}_${file.name}`;
+        const fileName = `${Date.now()}_${studentName}_${file.name.replace(/[^a-zA-Z0-9.-]/g, '_')}`;
         const { error: uploadError } = await supabase.storage.from('scratch-files').upload(fileName, file);
         if (uploadError) { studentMsgDiv.innerHTML = `<span style="color:red;">上传失败: ${uploadError.message}</span>`; return; }
         const { data: urlData } = supabase.storage.from('scratch-files').getPublicUrl(fileName);
@@ -548,12 +620,12 @@
             file_name: file.name, file_url: urlData.publicUrl, score: null, feedback: null
         }]);
         if (insertError) studentMsgDiv.innerHTML = `<span style="color:red;">提交失败: ${insertError.message}</span>`;
-        else { studentMsgDiv.innerHTML = '<span style="color:green;">✅ 作业已提交！</span>'; fileInput.value = ''; studentNameInput.value = ''; }
+        else { studentMsgDiv.innerHTML = '<span style="color:green;"><i class="fas fa-check-circle"></i> 作业已提交，教师批改后会显示评分！</span>'; fileInput.value = ''; studentNameInput.value = ''; }
     };
 
     function escapeHtml(str) { if (!str) return ''; return str.replace(/[&<>]/g, m => ({ '&':'&amp;', '<':'&lt;', '>':'&gt;' }[m])); }
 
-    // 初始化
+    // 初始化入口
     loadLocalState();
     bindEvalButtons();
 </script>
