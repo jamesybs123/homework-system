@@ -3,70 +3,79 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
-    <title>OMO社区 | 学习空间 + 云端作业系统 - 完整23课</title>
+    <title>OMO社区少儿编程学习空间 | 双空间联动·家社师协同·双轨评价</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
     <style>
         * {
             margin: 0;
             padding: 0;
             box-sizing: border-box;
-            font-family: 'Inter', system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            font-family: 'Inter', system-ui, -apple-system, 'Segoe UI', Roboto, sans-serif;
         }
         body {
             background: linear-gradient(145deg, #eef2f9 0%, #dce5f0 100%);
             min-height: 100vh;
             padding-bottom: 60px;
         }
+        .glass-nav {
+            background: rgba(255, 255, 255, 0.85);
+            backdrop-filter: blur(12px);
+            border-bottom: 1px solid rgba(255,255,255,0.5);
+            padding: 14px 30px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            flex-wrap: wrap;
+            gap: 16px;
+            position: sticky;
+            top: 0;
+            z-index: 100;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.05);
+        }
+        .logo {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            font-size: 1.6rem;
+            font-weight: 700;
+            background: linear-gradient(135deg, #1e5a7d, #4A90E2);
+            -webkit-background-clip: text;
+            background-clip: text;
+            color: transparent;
+        }
+        .user-badge {
+            background: white;
+            border-radius: 60px;
+            padding: 6px 20px 6px 12px;
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.05);
+        }
+        .avatar {
+            width: 44px;
+            height: 44px;
+            background: linear-gradient(145deg, #FF8E53, #FF6B35);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-weight: bold;
+            font-size: 1.2rem;
+        }
         .container {
             max-width: 1400px;
             margin: 30px auto;
             padding: 0 24px;
         }
-        .card {
-            background: white;
+        .hero {
+            background: linear-gradient(135deg, #4A90E2, #6C63FF);
             border-radius: 32px;
-            padding: 26px;
-            margin-bottom: 30px;
-            box-shadow: 0 8px 24px rgba(0,0,0,0.06);
-            transition: all 0.2s;
-        }
-        .card-header {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            margin-bottom: 18px;
-            border-bottom: 2px solid #f0f2f8;
-            padding-bottom: 12px;
-            flex-wrap: wrap;
-            gap: 10px;
-        }
-        .card-title {
-            font-size: 1.5rem;
-            font-weight: 600;
-        }
-        .btn {
-            background: #4A90E2;
+            padding: 30px 35px;
             color: white;
-            border: none;
-            padding: 8px 20px;
-            border-radius: 40px;
-            cursor: pointer;
-            font-weight: 500;
-            transition: 0.2s;
-            display: inline-block;
-            font-size: 0.9rem;
-        }
-        .btn:hover { opacity: 0.85; transform: scale(0.97);}
-        .btn-warning { background: #FF8E53; }
-        .btn-danger { background: #e74c3c; }
-        .btn-success { background: #27ae60; }
-        input, textarea, select {
-            width: 100%;
-            padding: 10px 14px;
-            border-radius: 20px;
-            border: 1px solid #cbd5e1;
-            margin: 8px 0;
+            margin-bottom: 35px;
+            box-shadow: 0 15px 30px rgba(74,144,226,0.25);
         }
         .stats-grid {
             display: grid;
@@ -82,7 +91,9 @@
             align-items: center;
             gap: 18px;
             box-shadow: 0 6px 14px rgba(0,0,0,0.05);
+            transition: transform 0.2s;
         }
+        .stat-card:hover { transform: translateY(-4px); }
         .stat-icon {
             width: 58px;
             height: 58px;
@@ -94,89 +105,30 @@
             font-size: 28px;
             color: #4A90E2;
         }
-        .lessons-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fill, minmax(260px, 1fr));
-            gap: 14px;
-            margin-top: 20px;
-            max-height: 520px;
-            overflow-y: auto;
-            border: 1px solid #eef2f8;
-            border-radius: 24px;
-            padding: 20px;
-            background: #ffffff;
-        }
-        .lesson-item {
-            background: #f9fbfe;
-            border-radius: 24px;
-            padding: 14px 18px;
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            border: 1px solid #eef2f8;
-            transition: 0.1s;
-            box-shadow: 0 1px 2px rgba(0,0,0,0.02);
-        }
-        .lesson-item:hover {
-            background: #f0f4ff;
-            transform: translateY(-1px);
-        }
-        .complete-lesson-btn {
-            background: #FF8E53;
-            border: none;
-            border-radius: 30px;
-            padding: 6px 18px;
-            font-size: 0.75rem;
-            font-weight: bold;
-            color: white;
-            cursor: pointer;
-            transition: 0.1s;
-        }
-        .complete-lesson-btn:hover {
-            background: #e57c3e;
-        }
-        .badges-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fill, minmax(140px, 1fr));
-            gap: 16px;
-            margin-top: 15px;
-        }
-        .badge-item {
-            background: linear-gradient(145deg, #fff, #f8faff);
-            border-radius: 24px;
-            padding: 16px 8px;
-            text-align: center;
-            box-shadow: 0 4px 12px rgba(0,0,0,0.04);
-        }
-        .credit-log {
-            background: #f9fafc;
-            border-radius: 20px;
-            padding: 12px;
-            margin-bottom: 8px;
-            font-size: 13px;
-        }
         .two-columns {
             display: grid;
-            grid-template-columns: 1fr 1fr;
+            grid-template-columns: 1fr 0.9fr;
             gap: 30px;
             margin-bottom: 30px;
         }
-        .homework-item {
-            background: #f9fafc;
-            border-radius: 24px;
-            padding: 16px;
-            margin-bottom: 16px;
-            border-left: 5px solid #4A90E2;
+        .card {
+            background: white;
+            border-radius: 32px;
+            padding: 26px;
+            box-shadow: 0 8px 24px rgba(0,0,0,0.06);
         }
-        .flex-between {
+        .card-header {
             display: flex;
             justify-content: space-between;
             align-items: center;
-            flex-wrap: wrap;
-            gap: 10px;
+            margin-bottom: 18px;
+            border-bottom: 2px solid #f0f2f8;
+            padding-bottom: 12px;
         }
-        .hidden { display: none; }
-        .teacher-area { background: #fff9e8; border-radius: 24px; padding: 20px; margin-top: 20px; }
+        .card-title {
+            font-size: 1.5rem;
+            font-weight: 600;
+        }
         .progress-bar {
             background: #e9ecef;
             border-radius: 12px;
@@ -189,111 +141,307 @@
             height: 100%;
             border-radius: 12px;
         }
+        .btn-sm {
+            background: #4A90E2;
+            color: white;
+            border: none;
+            padding: 6px 16px;
+            border-radius: 40px;
+            cursor: pointer;
+            font-size: 0.85rem;
+            font-weight: 500;
+            transition: 0.2s;
+        }
+        .btn-sm:hover { opacity: 0.85; transform: scale(0.97);}
+        .upload-area {
+            border: 2px dashed #cbd5e1;
+            border-radius: 24px;
+            padding: 28px;
+            text-align: center;
+            background: #fefefe;
+            margin: 16px 0;
+        }
+        .badges-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(140px, 1fr));
+            gap: 16px;
+            margin-top: 15px;
+            max-height: 420px;
+            overflow-y: auto;
+        }
+        .badge-item {
+            background: linear-gradient(145deg, #fff, #f8faff);
+            border-radius: 24px;
+            padding: 16px 8px;
+            text-align: center;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.04);
+            transition: 0.2s;
+        }
+        .badge-item.earned {
+            border: 1px solid #FFD966;
+            background: linear-gradient(145deg, #fff9e8, #fff2db);
+        }
+        .credit-log {
+            background: #f9fafc;
+            border-radius: 20px;
+            padding: 12px;
+            margin-bottom: 8px;
+            font-size: 13px;
+        }
+        button { cursor: pointer; }
+        .teacher-eval, .parent-feedback {
+            background: #f8faff;
+            border-radius: 24px;
+            padding: 18px;
+            margin-top: 18px;
+        }
+        .lessons-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(210px, 1fr));
+            gap: 12px;
+            margin-top: 16px;
+            max-height: 380px;
+            overflow-y: auto;
+            padding-right: 6px;
+        }
+        .lesson-item {
+            background: #f9fbfe;
+            border-radius: 20px;
+            padding: 10px 12px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            transition: 0.1s;
+            border: 1px solid #eef2f8;
+        }
+        .lesson-name {
+            font-size: 0.85rem;
+            font-weight: 500;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+        .lesson-complete-badge {
+            color: #2ecc71;
+            font-size: 1rem;
+        }
+        .complete-lesson-btn {
+            background: #FF8E53;
+            border: none;
+            border-radius: 30px;
+            padding: 4px 12px;
+            font-size: 0.7rem;
+            font-weight: bold;
+            color: white;
+        }
         .completed-label {
             background: #e0f2e9;
             color: #2c6e3f;
-            padding: 4px 12px;
+            padding: 4px 10px;
             border-radius: 30px;
             font-size: 0.7rem;
             font-weight: bold;
         }
-        .course-header-info {
-            margin-bottom: 12px;
+        .credit-detail-grid {
+            background: #ffffffd9;
+            border-radius: 20px;
+            margin-top: 16px;
+            padding: 10px 0;
+        }
+        .credit-lesson-item {
+            display: flex;
+            justify-content: space-between;
+            padding: 8px 12px;
+            border-bottom: 1px solid #eef2fa;
+            font-size: 0.8rem;
+        }
+        .credit-total {
+            background: #eef2ff;
+            border-radius: 16px;
+            padding: 8px 12px;
+            font-weight: bold;
+            margin-top: 8px;
+        }
+        .credit-composition {
+            background: #eef2ff;
+            border-radius: 20px;
+            padding: 12px;
+            margin-bottom: 16px;
+            display: flex;
+            flex-wrap: wrap;
+            gap: 12px;
+            justify-content: space-between;
+        }
+        .credit-composition-item {
+            background: white;
+            border-radius: 16px;
+            padding: 8px 12px;
+            text-align: center;
+            flex: 1;
+            min-width: 80px;
+            box-shadow: 0 1px 3px rgba(0,0,0,0.05);
         }
         @media (max-width: 900px) {
             .two-columns { grid-template-columns: 1fr; }
-            .lessons-grid { grid-template-columns: 1fr; max-height: 400px; }
-        }
-        .lesson-number {
-            font-weight: 500;
-            background: #eef2ff;
-            padding: 2px 10px;
-            border-radius: 20px;
-            font-size: 0.7rem;
-            margin-right: 8px;
-        }
-        .credit-exchange-btn {
-            background: #f39c12;
         }
     </style>
 </head>
 <body>
+<div class="glass-nav">
+    <div class="logo"><i class="fas fa-chalkboard-user"></i> <span>OMO 社区编程空间</span></div>
+    <div class="user-badge">
+        <div class="avatar">轩</div>
+        <div><strong>李明轩</strong><br><span style="font-size:12px;">社区小创客</span></div>
+    </div>
+</div>
+
 <div class="container">
-    <!-- 欢迎横幅 -->
-    <div class="card" style="background: linear-gradient(135deg, #4A90E2, #6C63FF); color: white; padding: 30px 35px;">
-        <h1>✨ 欢迎，同学</h1>
-        <p>线上学习 + 线下实践 | 家校社协同 | 学分银行激励成长 | 完整23节编程课时</p>
-        <div style="margin-top:12px; font-size:0.9rem; opacity:0.9;">🏆 真实学分记录 · 课程完成度动态更新 · 丰富勋章体系 · 每完成一课时+5学分</div>
+    <div class="hero">
+        <h1>✨ 欢迎</h1>
+        <p>线上学习 + 线下实践 | 家校社协同 | 学分银行激励成长</p>
+        <div style="margin-top:12px; font-size:0.9rem; opacity:0.9;">🏆 真实学分记录 · 课程完成度动态更新 · 丰富勋章体系</div>
     </div>
 
-    <!-- 统计卡片 -->
-    <div class="stats-grid">
+    <!-- 统计数据 -->
+    <div class="stats-grid" id="statsArea">
         <div class="stat-card"><div class="stat-icon"><i class="fas fa-project-diagram"></i></div><div><h3 id="projectCount">0</h3><p>作品数</p></div></div>
         <div class="stat-card"><div class="stat-icon"><i class="fas fa-medal"></i></div><div><h3 id="badgeCount">0</h3><p>勋章获得</p></div></div>
         <div class="stat-card"><div class="stat-icon"><i class="fas fa-coins"></i></div><div><h3 id="creditAmount">0</h3><p>社区学分</p></div></div>
         <div class="stat-card"><div class="stat-icon"><i class="fas fa-check-circle"></i></div><div><h3 id="completionRate">0%</h3><p>课程完课率</p></div></div>
     </div>
 
-    <!-- 两列布局 -->
+    <!-- 主要内容区 -->
     <div class="two-columns">
+        <!-- 左侧：课程 + 学分银行 -->
         <div class="card">
-            <div class="card-header"><span class="card-title"><i class="fas fa-book-open"></i> 📖 编程课程·双空间学习 (共23课)</span></div>
-            <div id="courseListContainer">
-                <div id="courseList" style="min-height: 200px;"></div>
-            </div>
-            <div style="margin-top: 24px; background:#f0f4fc; border-radius: 24px; padding: 18px;">
+            <div class="card-header"><span class="card-title"><i class="fas fa-book-open"></i> 📖 编程课程·双空间学习</span><span style="font-size:13px; color:#4A90E2;">线下社区教室联动</span></div>
+            <div id="courseList"></div>
+            <div style="margin-top: 24px; background:#f0f4fc; border-radius: 24px; padding: 16px;">
                 <h4><i class="fas fa-university"></i> 社区学分银行</h4>
-                <div id="creditSummary"></div>
-                <button id="exchangeCreditBtn" class="btn credit-exchange-btn" style="background:#FF6B35; margin-top:12px;"><i class="fas fa-gift"></i> 兑换小奖品 (消耗20学分)</button>
+                <div id="creditSummary">加载中...</div>
+                <button id="exchangeCreditBtn" class="btn-sm" style="background:#FF6B35; margin-top:12px;">🎁 兑换小奖品 (消耗20学分)</button>
             </div>
         </div>
+
+        <!-- 右侧：作业 + 勋章 + 上传 -->
         <div class="card">
-            <div class="card-header"><span class="card-title"><i class="fas fa-medal"></i> 🏅 勋章墙</span></div>
+            <div class="card-header"><span class="card-title"><i class="fas fa-code-branch"></i> ✏️ 编程作业</span><span style="font-size:12px;">教师在线评分</span></div>
+            <div id="assignmentArea"></div>
+            <div class="upload-area" id="quickUploadArea">
+                <i class="fas fa-cloud-upload-alt" style="font-size: 32px; color:#4A90E2;"></i>
+                <p>上传Scratch项目文件 (.sb3) 获得学分奖励 (+5学分/作品)</p>
+                <button id="quickUploadBtn" class="btn-sm" style="background:#FF8E53;">📁 选择文件</button>
+                <p style="font-size:11px; margin-top:8px;">作品永久保存于浏览器数据库 (IndexedDB)</p>
+            </div>
+            <div class="card-header" style="margin-top: 20px;"><span class="card-title"><i class="fas fa-medal"></i> 🏅 勋章墙 (动态解锁)</span></div>
             <div id="badgesContainer" class="badges-grid"></div>
-            <div class="card-header" style="margin-top: 20px;"><span class="card-title"><i class="fas fa-comments"></i> 🤝 双轨评价 (教师·家长)</span></div>
-            <div id="evalArea">
-                <p><strong><i class="fas fa-chalkboard-teacher"></i> 教师评价：</strong> <span id="teacherCommentDisplay"></span></p>
-                <textarea id="teacherCommentInput" rows="2" placeholder="教师评语..."></textarea>
-                <button id="updateTeacherCommentBtn" class="btn" style="background:#4A90E2;">保存评语</button>
-                <hr style="margin: 15px 0;">
-                <p><strong><i class="fas fa-family"></i> 家长反馈：</strong></p>
-                <div id="parentFeedbackHistory"></div>
-                <textarea id="parentFeedbackInput" rows="2" placeholder="家长观察反馈..."></textarea>
-                <button id="submitParentFeedbackBtn" class="btn" style="background:#27ae60;">提交反馈</button>
+        </div>
+    </div>
+
+    <!-- 双轨评价 -->
+    <div class="card" style="margin-bottom: 30px;">
+        <div class="card-header"><span class="card-title"><i class="fas fa-comments"></i> 🤝 双轨评价 | 家-社-师协同</span></div>
+        <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 24px;">
+            <div class="teacher-eval">
+                <h4><i class="fas fa-chalkboard"></i> 教师评价</h4>
+                <p id="teacherCommentDisplay">逻辑清晰，作品创意不错，继续保持！</p>
+                <textarea id="teacherCommentInput" rows="2" placeholder="教师可在此撰写评语..." style="width:100%; border-radius:20px; padding:12px; margin-top:8px;"></textarea>
+                <button id="updateTeacherCommentBtn" class="btn-sm" style="margin-top:8px;">保存评语</button>
+                <div style="margin-top: 16px;"><strong>技术评价</strong><br>代码复杂度评分: <span id="codeScoreSpan">⭐⭐⭐ (72/100)</span></div>
+            </div>
+            <div class="parent-feedback">
+                <h4><i class="fas fa-users"></i> 家长观察反馈</h4>
+                <div id="parentFeedbackHistory">暂无反馈，请家长填写记录</div>
+                <textarea id="parentFeedbackInput" rows="2" placeholder="如：孩子在家主动练习，逻辑思维提升..." style="width:100%; border-radius:20px; padding:12px; margin-top:8px;"></textarea>
+                <button id="submitParentFeedbackBtn" class="btn-sm" style="margin-top:8px;">提交反馈</button>
             </div>
         </div>
     </div>
 
-    <!-- 云端作业系统 -->
+    <!-- 作品仓库 -->
     <div class="card">
-        <div class="card-header">
-            <span class="card-title"><i class="fas fa-cloud-upload-alt"></i> 学生作业提交 (Scratch .sb3)</span>
-            <button id="teacherModeBtn" class="btn btn-warning"><i class="fas fa-chalkboard-teacher"></i> 教师批改模式</button>
-        </div>
-        <div id="studentArea">
-            <div><label>你的姓名：</label><input type="text" id="studentName" placeholder="例如：李明轩"></div>
-            <div><label>选择作业：</label><select id="assignmentSelect"><option value="a1">垃圾分类小助手</option><option value="a2">迷宫游戏</option></select></div>
-            <div><label>上传 Scratch 文件 (.sb3)：</label><input type="file" id="fileInput" accept=".sb3"></div>
-            <button id="submitBtn" class="btn"><i class="fas fa-paper-plane"></i> 提交作业</button>
-            <div id="studentMsg" style="margin-top: 12px;"></div>
-        </div>
-    </div>
-
-    <!-- 教师批改区域 -->
-    <div id="teacherArea" class="card hidden">
-        <div class="card-header"><span class="card-title"><i class="fas fa-check-double"></i> 作业批改面板</span><button id="closeTeacherBtn" class="btn">✖ 关闭</button></div>
-        <div id="homeworkList">加载中...</div>
+        <div class="card-header"><span class="card-title"><i class="fas fa-database"></i> 📂 作品仓库 (真实作品列表)</span><button id="refreshProjectList" class="btn-sm">刷新</button></div>
+        <div id="projectFileList" style="max-height: 200px; overflow-y: auto;">加载中...</div>
     </div>
 </div>
 
 <script>
-    // ================= 1. Supabase 配置 =================
-    const SUPABASE_URL = 'https://paoounfqmdaadrtvbhcb.supabase.co';
-    const SUPABASE_ANON_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InBhb291bmZxbWRhYWRydHZiaGNiIiwicm9sZSI6ImFub24iLCJpYXQiOjE3Nzc0NTQ2MTMsImV4cCI6MjA5MzAzMDYxM30.J38Q6zjEYE5P3lYagCike0N7MO-l9PXNcYlZMk9_ey4';
-    const supabase = window.supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
-    const TEACHER_PASSWORD = 'teacher123';
-    
-    // 确保23节课程完整显示 (硬编码严格按照需求展示)
+    // ---------- IndexedDB 存储真实作品 ----------
+    const DB_NAME = "OMO_ScratchDB";
+    const STORE_NAME = "scratchFiles";
+    let db = null;
+    function openIndexedDB() {
+        return new Promise((resolve, reject) => {
+            const request = indexedDB.open(DB_NAME, 1);
+            request.onerror = () => reject(request.error);
+            request.onsuccess = () => { db = request.result; resolve(db); };
+            request.onupgradeneeded = (e) => {
+                const db = e.target.result;
+                if (!db.objectStoreNames.contains(STORE_NAME)) {
+                    db.createObjectStore(STORE_NAME, { keyPath: "id", autoIncrement: true });
+                }
+            };
+        });
+    }
+    async function saveScratchFile(file, arrayBuffer) {
+        const tx = db.transaction(STORE_NAME, "readwrite");
+        const store = tx.objectStore(STORE_NAME);
+        const record = { name: file.name, type: file.type, size: file.size, data: arrayBuffer, uploadTime: new Date().toISOString() };
+        return new Promise((resolve, reject) => {
+            const req = store.add(record);
+            req.onsuccess = () => resolve(req.result);
+            req.onerror = () => reject(req.error);
+        });
+    }
+    async function insertDemoProject() {
+        const tx = db.transaction(STORE_NAME, "readwrite");
+        const store = tx.objectStore(STORE_NAME);
+        const demoRecord = {
+            name: "🌊 示例项目-海底世界（示范作品）",
+            type: "application/x-scratch-project",
+            size: 0,
+            data: null,
+            uploadTime: new Date().toISOString(),
+            isDemo: true
+        };
+        return new Promise((resolve) => {
+            const req = store.add(demoRecord);
+            req.onsuccess = () => resolve(req.result);
+            req.onerror = () => resolve(null);
+        });
+    }
+    async function getAllProjectsMeta() {
+        const tx = db.transaction(STORE_NAME, "readonly");
+        const store = tx.objectStore(STORE_NAME);
+        return new Promise((resolve) => {
+            const req = store.getAll();
+            req.onsuccess = () => {
+                const items = req.result.map(item => ({ id: item.id, name: item.name, uploadTime: item.uploadTime, size: item.size, isDemo: item.isDemo || false }));
+                resolve(items);
+            };
+            req.onerror = () => resolve([]);
+        });
+    }
+    async function getFileDataById(id) {
+        const tx = db.transaction(STORE_NAME, "readonly");
+        const store = tx.objectStore(STORE_NAME);
+        return new Promise((resolve, reject) => {
+            const req = store.get(id);
+            req.onsuccess = () => resolve(req.result);
+            req.onerror = () => reject();
+        });
+    }
+    async function deleteProjectById(id) {
+        const tx = db.transaction(STORE_NAME, "readwrite");
+        const store = tx.objectStore(STORE_NAME);
+        return new Promise((resolve, reject) => {
+            const req = store.delete(id);
+            req.onsuccess = () => resolve();
+            req.onerror = () => reject();
+        });
+    }
+
+    // ---------- 应用数据 ----------
     const FULL_LESSONS = [
         "01-海底世界", "02-恐龙乐园", "03-奔跑的哨子", "04-排队的虫子", "05-鲨鱼特效",
         "06-山地足球", "07-保卫小鸡", "08-迷宫游戏", "09-七彩钢琴", "10-长江索道",
@@ -301,9 +449,10 @@
         "16-听音识路", "17-冒险之旅", "18-豆豆哥吃害虫", "19-小鸟与瓶子", "20-happy new year",
         "21-飞机大战", "22-玩转金箍棒", "23-青蛙过河记"
     ];
-    const COURSE_TITLE = "社区少儿编程项目课程（23课时）";
+    const COURSE_TITLE = "社区少儿编程项目课程";
 
     let appState = {
+        studentName: "李明轩",
         credits: 0,
         creditLogs: [],
         courses: [{
@@ -313,42 +462,44 @@
             completedLessonStatus: new Array(FULL_LESSONS.length).fill(false),
             completedLessons: 0
         }],
-        teacherComment: "期待你的进步！继续保持编程热情～",
+        assignments: [
+            { id: "a1", title: "垃圾分类小助手", desc: "制作垃圾分类互动动画，至少三种垃圾类型", dueDate: "2025-04-10", submissions: null },
+            { id: "a2", title: "迷宫游戏", desc: "角色从起点到终点，增加计时器功能", dueDate: "2025-04-20", submissions: null }
+        ],
+        teacherComment: "期待你的第一个作品和课程进度！",
         parentFeedbackList: []
     };
 
-    // 强制重置确保课程完整显示（若本地存储损坏或缺失则重建）
-    function ensureFullLessons() {
-        const course = appState.courses[0];
-        if (!course || course.lessons.length !== FULL_LESSONS.length) {
-            appState.courses = [{
-                id: 1,
-                title: COURSE_TITLE,
-                lessons: [...FULL_LESSONS],
-                completedLessonStatus: new Array(FULL_LESSONS.length).fill(false),
-                completedLessons: 0
-            }];
+    function syncCourseCompletedCount(course) {
+        if (course.completedLessonStatus) {
+            course.completedLessons = course.completedLessonStatus.filter(v => v === true).length;
         } else {
-            // 确保状态数组长度一致
-            if (!course.completedLessonStatus || course.completedLessonStatus.length !== FULL_LESSONS.length) {
-                const oldStatus = course.completedLessonStatus || [];
-                const newStatus = new Array(FULL_LESSONS.length).fill(false);
-                for (let i = 0; i < Math.min(oldStatus.length, FULL_LESSONS.length); i++) {
-                    if (oldStatus[i]) newStatus[i] = true;
-                }
-                course.completedLessonStatus = newStatus;
-                course.completedLessons = newStatus.filter(v=>v).length;
-                course.lessons = [...FULL_LESSONS];
-                course.title = COURSE_TITLE;
-            }
+            course.completedLessonStatus = new Array(course.lessons.length).fill(false);
+            course.completedLessons = 0;
         }
-        if (!appState.creditLogs) appState.creditLogs = [];
-        if (!appState.parentFeedbackList) appState.parentFeedbackList = [];
-        if (typeof appState.teacherComment !== 'string') appState.teacherComment = "期待你的进步！继续保持编程热情～";
-        saveLocalState();
+        return course.completedLessons;
     }
 
-    function loadLocalState() {
+    // 清理旧数据中的错误流水（比如包含“Scratch 基础”、“顺序与循环”等不应存在的课程名）
+    function sanitizeCreditLogs() {
+        if (!appState.creditLogs) appState.creditLogs = [];
+        const invalidKeywords = ["Scratch 基础", "顺序与循环", "Scratch基础"];
+        let cleaned = false;
+        appState.creditLogs = appState.creditLogs.filter(log => {
+            if (log.reason && invalidKeywords.some(kw => log.reason.includes(kw))) {
+                cleaned = true;
+                return false;
+            }
+            return true;
+        });
+        if (cleaned) {
+            const sum = appState.creditLogs.reduce((acc, log) => acc + (log.delta || 0), 0);
+            appState.credits = sum;
+            saveAppState();
+        }
+    }
+
+    function loadAppState() {
         const saved = localStorage.getItem("omo_learning_state");
         if (saved) {
             try {
@@ -356,278 +507,389 @@
                 appState = { ...appState, ...parsed };
                 if (!appState.creditLogs) appState.creditLogs = [];
                 if (!appState.parentFeedbackList) appState.parentFeedbackList = [];
-                if (!appState.courses || appState.courses.length === 0) {
+                if (!appState.assignments) appState.assignments = [];
+                
+                if (!appState.courses || appState.courses[0].lessons.length !== FULL_LESSONS.length) {
+                    const oldCourse = appState.courses?.[0];
+                    let oldStatus = oldCourse?.completedLessonStatus || [];
+                    const newStatus = new Array(FULL_LESSONS.length).fill(false);
+                    if (oldStatus.length === FULL_LESSONS.length) {
+                        for (let i=0; i<FULL_LESSONS.length; i++) newStatus[i] = oldStatus[i];
+                    } else if (oldCourse?.completedLessons > 0) {
+                        for (let i=0; i<Math.min(oldCourse.completedLessons, FULL_LESSONS.length); i++) newStatus[i] = true;
+                    }
                     appState.courses = [{
-                        id: 1, title: COURSE_TITLE, lessons: [...FULL_LESSONS],
-                        completedLessonStatus: new Array(FULL_LESSONS.length).fill(false), completedLessons: 0
+                        id: 1,
+                        title: COURSE_TITLE,
+                        lessons: [...FULL_LESSONS],
+                        completedLessonStatus: newStatus,
+                        completedLessons: newStatus.filter(v=>v).length
                     }];
+                } else {
+                    const course = appState.courses[0];
+                    if (!course.completedLessonStatus || course.completedLessonStatus.length !== FULL_LESSONS.length) {
+                        const newStatus = new Array(FULL_LESSONS.length).fill(false);
+                        if (course.completedLessonStatus && course.completedLessonStatus.length) {
+                            for (let i=0; i<Math.min(course.completedLessonStatus.length, FULL_LESSONS.length); i++) {
+                                if (course.completedLessonStatus[i]) newStatus[i] = true;
+                            }
+                        } else if (course.completedLessons > 0) {
+                            for (let i=0; i<Math.min(course.completedLessons, FULL_LESSONS.length); i++) newStatus[i] = true;
+                        }
+                        course.completedLessonStatus = newStatus;
+                        course.completedLessons = newStatus.filter(v=>v).length;
+                    }
+                    syncCourseCompletedCount(course);
                 }
-            } catch(e) { console.error(e); }
+
+                sanitizeCreditLogs();
+
+                const sumFromLogs = appState.creditLogs.reduce((acc, log) => acc + (log.delta || 0), 0);
+                if (appState.credits !== sumFromLogs) {
+                    appState.credits = sumFromLogs;
+                }
+            } catch(e) {}
+        } else {
+            appState.courses[0].completedLessonStatus = new Array(FULL_LESSONS.length).fill(false);
+            appState.courses[0].completedLessons = 0;
+            appState.credits = 0;
+            appState.creditLogs = [];
         }
-        ensureFullLessons();       // 确保永远显示23课
-        saveLocalState();
-        renderLocalUI();
+        saveAppState();
     }
 
-    function saveLocalState() {
+    function saveAppState() {
+        if (appState.courses[0]) syncCourseCompletedCount(appState.courses[0]);
         localStorage.setItem("omo_learning_state", JSON.stringify(appState));
     }
 
-    function addLocalCredits(delta, reason) {
-        appState.credits = Math.max(0, appState.credits + delta);
-        appState.creditLogs.unshift({ reason, delta, date: new Date().toISOString() });
-        saveLocalState();
-        renderLocalUI();
+    function modifyCredits(delta, reason, extra = null) {
+        appState.credits += delta;
+        let logReason = reason;
+        if (extra) {
+            logReason = `${reason} ${extra}`;
+        }
+        appState.creditLogs.unshift({ reason: logReason, delta, date: new Date().toISOString() });
+        saveAppState();
+        renderAll();
     }
 
-    function completeLocalLesson(lessonIndex, lessonName) {
-        const course = appState.courses[0];
-        if (lessonIndex < 0 || lessonIndex >= FULL_LESSONS.length) return;
+    async function completeLesson(courseId, lessonIndex, lessonName) {
+        const course = appState.courses.find(c => c.id === courseId);
+        if (!course) return;
         if (course.completedLessonStatus[lessonIndex]) {
-            alert("⚠️ 该课时已完成，请勿重复提交");
+            alert("该课时已完成，请勿重复提交");
             return;
         }
         course.completedLessonStatus[lessonIndex] = true;
-        course.completedLessons = course.completedLessonStatus.filter(v=>v).length;
-        saveLocalState();
-        addLocalCredits(5, `📖 完成课时「${lessonName}」 (课程：${COURSE_TITLE})`);
-        alert(`🎉 恭喜完成「${lessonName}」！获得 5 学分，继续加油！`);
-        renderLocalUI();
+        syncCourseCompletedCount(course);
+        saveAppState();
+        modifyCredits(5, `📖 完成课时「${lessonName}」`, `(课程：${COURSE_TITLE})`);
+        alert(`🎉 完成「${lessonName}」！获得 5 学分，课程进度 ${course.completedLessons}/${course.lessons.length}`);
     }
 
-    async function computeLocalBadges() {
-        let completed = appState.courses[0]?.completedLessons || 0;
-        let credits = appState.credits;
+    async function computeBadges() {
+        const projects = await getAllProjectsMeta();
+        const realProjects = projects.filter(p => !p.isDemo);
+        const projectCount = realProjects.length;
+        const course = appState.courses[0];
+        const completedLessons = course.completedLessons;
+        const totalLessons = FULL_LESSONS.length;
+        const subCount = appState.assignments.filter(a => a.submissions !== null).length;
+        const credits = appState.credits;
+        
         let badges = [];
-        if (completed >= 1) badges.push({ name: "启程者", icon: "🚀", desc: "完成第1课时" });
-        if (completed >= 5) badges.push({ name: "初级代码师", icon: "👨‍💻", desc: "完成5课时" });
-        if (completed >= 12) badges.push({ name: "进阶编码家", icon: "⚙️", desc: "完成12课时" });
-        if (completed >= 18) badges.push({ name: "算法探索者", icon: "🔍", desc: "完成18课时" });
-        if (completed === FULL_LESSONS.length) badges.push({ name: "全课程大师", icon: "🏅", desc: "完成全部23课时" });
-        if (credits >= 50) badges.push({ name: "学分小管家", icon: "💰", desc: "累计50学分" });
-        if (credits >= 100) badges.push({ name: "理财之星", icon: "💵", desc: "累计100学分" });
-        if (appState.creditLogs.length >= 5) badges.push({ name: "活跃之星", icon: "⭐", desc: "获得5次学分" });
-        if (badges.length === 0) badges.push({ name: "努力新星", icon: "🌟", desc: "开始学习吧" });
+        if (completedLessons >= 1) badges.push({ name: "启程者", icon: "🚀", earned: true, desc: "完成第1课时" });
+        if (completedLessons >= 5) badges.push({ name: "初级代码师", icon: "👨‍💻", earned: true, desc: "完成5课时" });
+        if (completedLessons >= 12) badges.push({ name: "进阶编码家", icon: "⚙️", earned: true, desc: "完成12课时" });
+        if (completedLessons >= 18) badges.push({ name: "算法探索者", icon: "🔍", earned: true, desc: "完成18课时" });
+        if (completedLessons === totalLessons) badges.push({ name: "全课程大师", icon: "🏅", earned: true, desc: "完成全部23课时" });
+        if (projectCount >= 1) badges.push({ name: "小小创作者", icon: "🎨", earned: true, desc: "上传第1个作品" });
+        if (projectCount >= 3) badges.push({ name: "作品收集者", icon: "📀", earned: true, desc: "上传3个作品" });
+        if (projectCount >= 5) badges.push({ name: "创意发明家", icon: "💎", earned: true, desc: "上传5个作品" });
+        if (subCount >= 1) badges.push({ name: "作业新锐", icon: "📝", earned: true, desc: "完成1次作业" });
+        if (subCount >= 2) badges.push({ name: "作业达人", icon: "📚", earned: true, desc: "完成全部2次作业" });
+        if (credits >= 50) badges.push({ name: "学分小管家", icon: "💰", earned: true, desc: "累计50学分" });
+        if (credits >= 100) badges.push({ name: "理财之星", icon: "💵", earned: true, desc: "累计100学分" });
+        if (credits >= 200) badges.push({ name: "学分大亨", icon: "🏦", earned: true, desc: "累计200学分" });
+        if (appState.creditLogs.length >= 8) badges.push({ name: "活跃之星", icon: "⭐", earned: true, desc: "获得8次学分记录" });
+        if (appState.creditLogs.length >= 15) badges.push({ name: "学习狂人", icon: "🔥", earned: true, desc: "获得15次学分记录" });
+        if (projectCount >= 2 && completedLessons >= 5 && subCount >= 1) badges.push({ name: "全能开发者", icon: "🏆", earned: true, desc: "作品+课时+作业全面发展" });
+        if (completedLessons === totalLessons && projectCount >= 3 && subCount === 2) badges.push({ name: "社区传奇", icon: "👑", earned: true, desc: "完美通关所有学习任务" });
+        if (badges.length === 0) badges.push({ name: "努力新星", icon: "🌟", earned: true, desc: "开始你的编程之旅" });
         return badges;
     }
 
-    async function renderLocalUI() {
-        const course = appState.courses[0];
-        if (!course || course.lessons.length !== FULL_LESSONS.length) {
-            ensureFullLessons();
-            return renderLocalUI();
+    function getCreditBreakdown() {
+        let courseCredits = 0, assignmentCredits = 0, projectCredits = 0, otherCredits = 0;
+        for (let log of appState.creditLogs) {
+            const delta = log.delta;
+            const reason = log.reason;
+            if (reason.includes("课时") && reason.includes(COURSE_TITLE)) courseCredits += delta;
+            else if (reason.includes("作业")) assignmentCredits += delta;
+            else if (reason.includes("上传作品")) projectCredits += delta;
+            else otherCredits += delta;
         }
-        const total = course.lessons.length;
-        const completed = course.completedLessons;
-        const rate = total === 0 ? 0 : Math.floor((completed / total) * 100);
-        document.getElementById("completionRate").innerText = rate + "%";
-        document.getElementById("creditAmount").innerText = appState.credits;
-        document.getElementById("projectCount").innerText = "0"; // 可扩展作品集
+        return { courseCredits, assignmentCredits, projectCredits, otherCredits };
+    }
 
-        const badgesList = await computeLocalBadges();
-        document.getElementById("badgeCount").innerText = badgesList.length;
-
-        // 渲染课程列表 - 完整23节课程强制展示
-        let html = `<div class="course-header-info"><strong>${course.title}</strong><div class="progress-bar"><div class="progress-fill" style="width:${rate}%;"></div></div><div>📊 总进度: ${completed}/${total} 课时 &nbsp;&nbsp;🏆 完课率 ${rate}%</div><div style="margin-top:8px; font-size:0.75rem; color:#2c6e9f;"><i class="fas fa-info-circle"></i> 每完成一课时 +5 学分，学分银行自动记录，集学分赢勋章</div></div><div class="lessons-grid">`;
+    async function renderAll() {
+        const projectsMeta = await getAllProjectsMeta();
+        const realProjects = projectsMeta.filter(p => !p.isDemo);
+        const totalProjectCount = projectsMeta.length;
+        const realProjectCount = realProjects.length;
+        document.getElementById("projectCount").innerText = totalProjectCount;
         
-        course.lessons.forEach((name, idx) => {
+        const badgesList = await computeBadges();
+        document.getElementById("badgeCount").innerText = badgesList.filter(b=>b.earned).length;
+        document.getElementById("creditAmount").innerText = appState.credits;
+        
+        const course = appState.courses[0];
+        const totalLessons = course.lessons.length;
+        const completedLessons = course.completedLessons;
+        const rate = totalLessons === 0 ? 0 : Math.round((completedLessons / totalLessons) * 100);
+        document.getElementById("completionRate").innerText = rate + "%";
+        
+        // 课程网格
+        let courseHtml = `
+            <div><strong>${course.title}</strong>
+            <div class="progress-bar"><div class="progress-fill" style="width: ${rate}%;"></div></div>
+            <div>总进度: ${completedLessons}/${totalLessons} 课时</div>
+            <div style="margin-top:8px; font-size:0.75rem; color:#2c6e9f;">✨ 每完成一课时 +5 学分，学分银行自动记录对应课时名称</div>
+            </div>
+            <div class="lessons-grid">
+        `;
+        for (let idx = 0; idx < course.lessons.length; idx++) {
+            const lessonTitle = course.lessons[idx];
             const isCompleted = course.completedLessonStatus[idx];
-            // 显示序号 + 课程名，更清晰
-            const lessonNumber = (idx+1).toString().padStart(2,'0');
             if (isCompleted) {
-                html += `<div class="lesson-item"><div><span class="lesson-number">✅ ${lessonNumber}</span> <strong>${name}</strong></div><span class="completed-label"><i class="fas fa-check-circle"></i> 已完成</span></div>`;
+                courseHtml += `<div class="lesson-item" style="background:#eef7f0;"><div class="lesson-name"><span class="lesson-complete-badge"><i class="fas fa-check-circle"></i></span> ${lessonTitle}</div><span class="completed-label">已完成</span></div>`;
             } else {
-                html += `<div class="lesson-item"><div><span class="lesson-number">📘 ${lessonNumber}</span> <strong>${name}</strong></div><button class="complete-lesson-btn" data-idx="${idx}" data-name="${name}"><i class="fas fa-check"></i> 完成本课</button></div>`;
+                courseHtml += `<div class="lesson-item"><div class="lesson-name">📘 ${lessonTitle}</div><button class="complete-lesson-btn" data-course-id="${course.id}" data-lesson-index="${idx}" data-lesson-name="${lessonTitle}">✅ 完成</button></div>`;
             }
-        });
-        html += `</div>`;
-        const courseListDiv = document.getElementById("courseList");
-        if (courseListDiv) {
-            courseListDiv.innerHTML = html;
-        } else {
-            console.error("courseList element not found");
         }
-
-        // 绑定完成按钮事件 (使用事件委托避免重复绑定)
-        if (courseListDiv) {
-            courseListDiv.querySelectorAll(".complete-lesson-btn").forEach(btn => {
-                btn.removeEventListener("click", window._dynamicLessonClick);
-                const handler = (e) => {
-                    e.stopPropagation();
-                    const idx = parseInt(btn.dataset.idx);
-                    const name = btn.dataset.name;
-                    if (!isNaN(idx)) completeLocalLesson(idx, name);
-                };
-                btn.addEventListener("click", handler);
-                window._dynamicLessonClick = handler;
+        courseHtml += `</div>`;
+        document.getElementById("courseList").innerHTML = courseHtml;
+        document.querySelectorAll(".complete-lesson-btn").forEach(btn => {
+            btn.addEventListener("click", async (e) => {
+                const courseId = parseInt(btn.dataset.courseId);
+                const idx = parseInt(btn.dataset.lessonIndex);
+                const name = btn.dataset.lessonName;
+                await completeLesson(courseId, idx, name);
             });
-        }
-
-        // 学分银行渲染
-        let creditHtml = `<div style="font-weight:bold; margin-bottom:8px;">💰 当前学分: ${appState.credits}</div><div style="max-height:150px; overflow:auto;">`;
-        if (appState.creditLogs.length === 0) creditHtml += `<div class="credit-log">✨ 暂无记录，完成课程即可获得学分~</div>`;
-        appState.creditLogs.slice(0, 6).forEach(log => {
-            creditHtml += `<div class="credit-log"><i class="fas fa-coins"></i> ${new Date(log.date).toLocaleString()} — ${log.reason} ${log.delta > 0 ? `+${log.delta}` : `${log.delta}`}</div>`;
         });
-        creditHtml += `</div>`;
-        document.getElementById("creditSummary").innerHTML = creditHtml;
+
+        // 作业部分
+        let assignHtml = "";
+        for (let assign of appState.assignments) {
+            const submitted = assign.submissions !== null;
+            assignHtml += `<div style="border-bottom:1px solid #edf2f7; padding:12px 0;">
+                <strong>📌 ${assign.title}</strong><br><small>${assign.desc} 截止:${assign.dueDate}</small><br>`;
+            if (submitted) {
+                assignHtml += `<span style="color:green;">✅ 已提交 得分:${assign.submissions.score ?? '待评'} 反馈:${assign.submissions.feedback ?? '无'}</span>`;
+                if (assign.submissions.score === null) assignHtml += ` <button class="btn-sm teacherGradeBtn" data-id="${assign.id}">教师评分</button>`;
+            } else {
+                assignHtml += `<button class="btn-sm submitAssignmentBtn" data-id="${assign.id}" style="background:#FF8E53;">📤 上传作品提交作业 (+10学分)</button>`;
+            }
+            assignHtml += `</div>`;
+        }
+        document.getElementById("assignmentArea").innerHTML = assignHtml;
+        
+        document.querySelectorAll(".submitAssignmentBtn").forEach(btn => {
+            btn.addEventListener("click", async (e) => {
+                const assignId = btn.dataset.id;
+                const fileInput = document.createElement("input");
+                fileInput.type = "file";
+                fileInput.accept = ".sb3";
+                fileInput.onchange = async (ev) => {
+                    const file = ev.target.files[0];
+                    if (!file) return;
+                    const reader = new FileReader();
+                    reader.onload = async (evt) => {
+                        const buffer = evt.target.result;
+                        await saveScratchFile(file, buffer);
+                        const assign = appState.assignments.find(a => a.id === assignId);
+                        assign.submissions = { fileName: file.name, submitTime: new Date().toISOString(), score: null, feedback: null };
+                        modifyCredits(10, `📚 完成作业「${assign.title}」`, null);
+                        saveAppState();
+                        renderAll();
+                        alert(`作业提交成功！获得10学分。`);
+                    };
+                    reader.readAsArrayBuffer(file);
+                };
+                fileInput.click();
+            });
+        });
+        document.querySelectorAll(".teacherGradeBtn").forEach(btn => {
+            btn.addEventListener("click", () => {
+                const assignId = btn.dataset.id;
+                const assign = appState.assignments.find(a => a.id === assignId);
+                if (assign.submissions) {
+                    let score = prompt("输入分数 (0-100)", assign.submissions.score ?? 85);
+                    let fb = prompt("教师评语", assign.submissions.feedback ?? "项目完整，逻辑清晰");
+                    if (score !== null) assign.submissions.score = parseInt(score);
+                    if (fb !== null) assign.submissions.feedback = fb;
+                    saveAppState();
+                    renderAll();
+                }
+            });
+        });
 
         // 勋章墙
-        let badgeHtml = "";
-        if (badgesList.length) {
-            badgesList.forEach(b => {
-                badgeHtml += `<div class="badge-item"><div style="font-size:36px;">${b.icon}</div><div><b>${b.name}</b></div><small>${b.desc}</small></div>`;
-            });
+        let badgesHtml = "";
+        for (let b of badgesList) {
+            const earnedClass = b.earned ? "earned" : "";
+            badgesHtml += `<div class="badge-item ${earnedClass}"><div style="font-size:36px;">${b.icon}</div><div><strong>${b.name}</strong></div><div style="font-size:12px; margin-top:4px;">${b.earned ? '✅ 已获得' : '🔒 未解锁'}</div><small>${b.desc}</small></div>`;
+        }
+        document.getElementById("badgesContainer").innerHTML = badgesHtml;
+
+        // 学分银行：学分构成 + 课时明细 + 流水（标题已精简）
+        const { courseCredits, assignmentCredits, projectCredits, otherCredits } = getCreditBreakdown();
+        const compositionHtml = `
+            <div class="credit-composition">
+                <div class="credit-composition-item"><div style="font-weight:bold;">📖 课程学分</div><div>${courseCredits}</div><small>课时完成</small></div>
+                <div class="credit-composition-item"><div style="font-weight:bold;">📚 作业学分</div><div>${assignmentCredits}</div><small>作业提交</small></div>
+                <div class="credit-composition-item"><div style="font-weight:bold;">🎨 作品学分</div><div>${projectCredits}</div><small>上传作品</small></div>
+                <div class="credit-composition-item"><div style="font-weight:bold;">🔄 其他变动</div><div>${otherCredits}</div><small>兑换等</small></div>
+            </div>
+        `;
+        
+        const completedIndices = course.completedLessonStatus.reduce((arr, val, idx) => val ? [...arr, idx] : arr, []);
+        let lessonDetailHtml = `<div class="credit-detail-grid"><div style="font-weight:600;">📋 已获得学分的课时明细（课程：${COURSE_TITLE}）</div>`;
+        if (completedIndices.length === 0) {
+            lessonDetailHtml += `<div style="padding:8px; color:#888;">暂无已完成课时，完成课时后会自动记录学分</div>`;
         } else {
-            badgeHtml = `<div class="badge-item">✨ 努力学习获得勋章吧</div>`;
-        }
-        document.getElementById("badgesContainer").innerHTML = badgeHtml;
-
-        // 双轨评价
-        document.getElementById("teacherCommentDisplay").innerText = appState.teacherComment || "暂无教师评语";
-        document.getElementById("teacherCommentInput").value = appState.teacherComment;
-        let parentHtml = "";
-        if (appState.parentFeedbackList && appState.parentFeedbackList.length) {
-            parentHtml = appState.parentFeedbackList.map(p => `<div class="credit-log"><i class="fas fa-user-check"></i> ${p.date}: ${p.text}</div>`).join("");
-        } else {
-            parentHtml = "<div style='color:#6c757d;'>暂无家长反馈，欢迎家长留下宝贵意见~</div>";
-        }
-        document.getElementById("parentFeedbackHistory").innerHTML = parentHtml;
-    }
-
-    // 绑定双轨评价按钮及学分兑换
-    function bindEvalButtons() {
-        const updateBtn = document.getElementById("updateTeacherCommentBtn");
-        const submitFeedbackBtn = document.getElementById("submitParentFeedbackBtn");
-        const exchangeBtn = document.getElementById("exchangeCreditBtn");
-        if (updateBtn) updateBtn.onclick = () => {
-            const newComment = document.getElementById("teacherCommentInput").value.trim();
-            if (newComment) appState.teacherComment = newComment;
-            else appState.teacherComment = "(未填写评语)";
-            saveLocalState();
-            renderLocalUI();
-            alert("教师评语已保存");
-        };
-        if (submitFeedbackBtn) submitFeedbackBtn.onclick = () => {
-            let text = document.getElementById("parentFeedbackInput").value.trim();
-            if (text) {
-                appState.parentFeedbackList.unshift({ text, date: new Date().toLocaleString() });
-                saveLocalState();
-                renderLocalUI();
-                document.getElementById("parentFeedbackInput").value = "";
-                alert("感谢您的反馈，家校共育助力成长！");
-            } else {
-                alert("请填写反馈内容");
+            for (let idx of completedIndices) {
+                lessonDetailHtml += `<div class="credit-lesson-item"><span>🎯 ${course.lessons[idx]}</span><span style="color:#2e7d32;">+5 学分</span></div>`;
             }
-        };
-        if (exchangeBtn) exchangeBtn.onclick = () => {
-            if (appState.credits >= 20) {
-                addLocalCredits(-20, "🎁 兑换社区小礼品 (文具/贴纸)");
-                alert("兑换成功！请前往社区服务中心领取奖品。");
-            } else {
-                alert("学分不足20，请继续完成课程获取学分～");
-            }
-        };
-    }
-
-    // ================= 云端作业系统部分 =================
-    const assignments = { a1: { title: "垃圾分类小助手" }, a2: { title: "迷宫游戏" } };
-    const studentAreaDiv = document.getElementById('studentArea');
-    const teacherAreaDiv = document.getElementById('teacherArea');
-    const teacherModeBtn = document.getElementById('teacherModeBtn');
-    const closeTeacherBtn = document.getElementById('closeTeacherBtn');
-    const submitBtn = document.getElementById('submitBtn');
-    const studentNameInput = document.getElementById('studentName');
-    const assignmentSelect = document.getElementById('assignmentSelect');
-    const fileInput = document.getElementById('fileInput');
-    const studentMsgDiv = document.getElementById('studentMsg');
-    const homeworkListDiv = document.getElementById('homeworkList');
-
-    teacherModeBtn.onclick = () => {
-        const pwd = prompt('请输入教师密码：');
-        if (pwd !== TEACHER_PASSWORD) {
-            alert('密码错误，无权限查看');
-            return;
+            lessonDetailHtml += `<div class="credit-total">📌 课程「${COURSE_TITLE}」累计获得: ${completedIndices.length * 5} 学分 (已完成 ${completedIndices.length}/${totalLessons} 课时)</div>`;
         }
-        studentAreaDiv.classList.add('hidden');
-        teacherAreaDiv.classList.remove('hidden');
-        loadAllHomeworks();
-    };
+        lessonDetailHtml += `</div>`;
+        
+        // 修改点：去掉了括号内的冗余说明，只保留“📜 学分流水”
+        let logsHtml = `<div style="margin-top:12px;"><strong>📜 学分流水</strong><div style="max-height:150px; overflow-y:auto;">`;
+        if (appState.creditLogs.length === 0) logsHtml += `<div class="credit-log">暂无学分记录，开始学习吧！</div>`;
+        appState.creditLogs.slice(0,8).forEach(log => {
+            logsHtml += `<div class="credit-log">${new Date(log.date).toLocaleString()} — ${log.reason}</div>`;
+        });
+        logsHtml += `</div></div>`;
+        
+        document.getElementById("creditSummary").innerHTML = `
+            <div><strong>🏦 当前总学分: ${appState.credits}</strong></div>
+            ${compositionHtml}
+            ${lessonDetailHtml}
+            ${logsHtml}
+        `;
 
-    closeTeacherBtn.onclick = () => {
-        teacherAreaDiv.classList.add('hidden');
-        studentAreaDiv.classList.remove('hidden');
-    };
-
-    async function loadAllHomeworks() {
-        homeworkListDiv.innerHTML = '<div class="teacher-area">📡 加载作业列表中...</div>';
-        const { data, error } = await supabase.from('homeworks').select('*').order('upload_time', { ascending: false });
-        if (error) {
-            homeworkListDiv.innerHTML = `<div class="teacher-area">❌ 加载失败: ${error.message}，请检查网络或Supabase配置。</div>`;
-            return;
+        // 作品仓库
+        let projHtml = "";
+        for (let p of projectsMeta) {
+            const isDemo = p.isDemo;
+            projHtml += `<div style="display:flex; justify-content:space-between; padding:8px 0; border-bottom:1px solid #eee;">
+                <span><i class="fas fa-file-code"></i> ${p.name} (${new Date(p.uploadTime).toLocaleDateString()})${isDemo ? ' 🌟 示范作品（无学分）' : ''}</span>
+                <span>
+                    ${!isDemo ? `<button class="downloadProjBtn" data-id="${p.id}" style="background:#4A90E2; border:none; border-radius:20px; padding:4px 12px; color:white;">下载</button>` : `<button disabled style="background:#aaa; border:none; border-radius:20px; padding:4px 12px; color:white;">示例</button>`}
+                    <button class="deleteProjBtn" data-id="${p.id}" data-demo="${isDemo}" style="background:#e74c3c; border:none; border-radius:20px; padding:4px 12px; color:white; margin-left:8px;">删除</button>
+                </span>
+            </div>`;
         }
-        if (!data || data.length === 0) {
-            homeworkListDiv.innerHTML = '<div class="teacher-area">📭 暂无学生提交作业，鼓励学生上传.sb3作品~</div>';
-            return;
-        }
-        let html = '';
-        for (let hw of data) {
-            html += `
-                <div class="homework-item" data-id="${hw.id}">
-                    <div class="flex-between">
-                        <div><strong><i class="fas fa-user-graduate"></i> ${escapeHtml(hw.student_name)}</strong> 提交了 <strong>「${escapeHtml(hw.assignment_title)}」</strong></div>
-                        <div><i class="far fa-calendar-alt"></i> ${new Date(hw.upload_time).toLocaleString()}</div>
-                    </div>
-                    <div>📄 文件名: ${escapeHtml(hw.file_name)}</div>
-                    <div><a href="${hw.file_url}" target="_blank" class="btn" style="background:#2c3e50; padding:6px 16px; display:inline-block;"><i class="fas fa-download"></i> 下载作品</a></div>
-                    <div style="margin-top:12px;">
-                        <label>📊 评分 (0-100): </label>
-                        <input type="number" id="score_${hw.id}" value="${hw.score !== null ? hw.score : ''}" style="width:100px; display:inline; margin-right:12px;">
-                        <label>✍️ 教师评语: </label>
-                        <input type="text" id="feedback_${hw.id}" value="${escapeHtml(hw.feedback || '')}" style="width:260px; display:inline;">
-                        <button class="btn save-grade-btn" data-id="${hw.id}" style="background:#27ae60; margin-left:8px;">💾 保存</button>
-                    </div>
-                </div>
-            `;
-        }
-        homeworkListDiv.innerHTML = html;
-        document.querySelectorAll('.save-grade-btn').forEach(btn => {
-            btn.addEventListener('click', async (e) => {
+        document.getElementById("projectFileList").innerHTML = projHtml || "<div>暂无作品，请上传</div>";
+        
+        document.querySelectorAll(".downloadProjBtn").forEach(btn => {
+            btn.addEventListener("click", async (e) => {
                 const id = parseInt(btn.dataset.id);
-                const score = document.getElementById(`score_${id}`).value;
-                const feedback = document.getElementById(`feedback_${id}`).value;
-                const pwd = prompt('教师权限验证：输入密码以保存评分');
-                if (pwd !== TEACHER_PASSWORD) { alert('密码错误，保存失败'); return; }
-                const { error } = await supabase.from('homeworks').update({ score: score ? parseInt(score) : null, feedback }).eq('id', id);
-                if (error) alert('保存失败: ' + error.message);
-                else { alert('评分与评语已更新'); loadAllHomeworks(); }
+                const record = await getFileDataById(id);
+                if (record && record.data) {
+                    const blob = new Blob([record.data], { type: "application/octet-stream" });
+                    const url = URL.createObjectURL(blob);
+                    const a = document.createElement("a");
+                    a.href = url;
+                    a.download = record.name;
+                    a.click();
+                    URL.revokeObjectURL(url);
+                } else alert("该作品无实际文件数据");
             });
         });
+        document.querySelectorAll(".deleteProjBtn").forEach(btn => {
+            btn.addEventListener("click", async (e) => {
+                if (confirm("确定删除此作品？")) {
+                    const id = parseInt(btn.dataset.id);
+                    await deleteProjectById(id);
+                    const remain = await getAllProjectsMeta();
+                    if (remain.length === 0) {
+                        await insertDemoProject();
+                    }
+                    renderAll();
+                }
+            });
+        });
+
+        document.getElementById("teacherCommentDisplay").innerText = appState.teacherComment;
+        document.getElementById("teacherCommentInput").value = appState.teacherComment;
+        let techScore = Math.min(100, 60 + realProjectCount * 5 + appState.assignments.filter(a=>a.submissions).length * 8);
+        let star = techScore >= 80 ? "⭐⭐⭐⭐" : (techScore >= 60 ? "⭐⭐⭐" : "⭐⭐");
+        document.getElementById("codeScoreSpan").innerHTML = `${star} (${techScore}/100) · 基于真实作品与作业`;
+        let parentHtml = appState.parentFeedbackList.map(p => `<div>📝 ${p.date}: ${p.text}</div>`).join("");
+        document.getElementById("parentFeedbackHistory").innerHTML = parentHtml || "暂无反馈";
     }
 
-    submitBtn.onclick = async () => {
-        const studentName = studentNameInput.value.trim();
-        if (!studentName) { studentMsgDiv.innerHTML = '<span style="color:red;">请填写真实姓名</span>'; return; }
-        const file = fileInput.files[0];
-        if (!file || !file.name.endsWith('.sb3')) { studentMsgDiv.innerHTML = '<span style="color:red;">请选择有效的 Scratch (.sb3) 文件</span>'; return; }
-        const assignmentTitle = assignments[assignmentSelect.value].title;
-        const fileName = `${Date.now()}_${studentName}_${file.name.replace(/[^a-zA-Z0-9.-]/g, '_')}`;
-        const { error: uploadError } = await supabase.storage.from('scratch-files').upload(fileName, file);
-        if (uploadError) { studentMsgDiv.innerHTML = `<span style="color:red;">上传失败: ${uploadError.message}</span>`; return; }
-        const { data: urlData } = supabase.storage.from('scratch-files').getPublicUrl(fileName);
-        const { error: insertError } = await supabase.from('homeworks').insert([{
-            student_name: studentName, assignment_id: assignmentSelect.value, assignment_title: assignmentTitle,
-            file_name: file.name, file_url: urlData.publicUrl, score: null, feedback: null
-        }]);
-        if (insertError) studentMsgDiv.innerHTML = `<span style="color:red;">提交失败: ${insertError.message}</span>`;
-        else { studentMsgDiv.innerHTML = '<span style="color:green;"><i class="fas fa-check-circle"></i> 作业已提交，教师批改后会显示评分！</span>'; fileInput.value = ''; studentNameInput.value = ''; }
+    async function triggerFileUpload() {
+        const input = document.createElement("input");
+        input.type = "file";
+        input.accept = ".sb3,.sb2";
+        input.onchange = async (e) => {
+            const file = e.target.files[0];
+            if (!file) return;
+            const reader = new FileReader();
+            reader.onload = async (ev) => {
+                const buffer = ev.target.result;
+                await saveScratchFile(file, buffer);
+                modifyCredits(5, `🎨 上传作品「${file.name}」`, null);
+                renderAll();
+                alert(`作品已保存，获得5学分`);
+            };
+            reader.readAsArrayBuffer(file);
+        };
+        input.click();
+    }
+
+    window.onload = async () => {
+        await openIndexedDB();
+        let projects = await getAllProjectsMeta();
+        if (projects.length === 0) {
+            await insertDemoProject();
+        }
+        loadAppState();
+        await renderAll();
+        
+        document.getElementById("exchangeCreditBtn").addEventListener("click", () => {
+            if (appState.credits >= 20) {
+                modifyCredits(-20, "🎁 兑换社区小礼品/线下荣誉勋章打印券", null);
+                alert("兑换成功！可凭记录到社区领取精美小礼品。");
+                renderAll();
+            } else {
+                alert(`学分不足20，当前${appState.credits}学分，继续完成课程、作业或上传作品获取学分。`);
+            }
+        });
+        document.getElementById("quickUploadBtn").addEventListener("click", triggerFileUpload);
+        document.getElementById("updateTeacherCommentBtn").addEventListener("click", () => {
+            appState.teacherComment = document.getElementById("teacherCommentInput").value;
+            saveAppState();
+            renderAll();
+            alert("教师评语已更新");
+        });
+        document.getElementById("submitParentFeedbackBtn").addEventListener("click", () => {
+            const text = document.getElementById("parentFeedbackInput").value;
+            if (text.trim()) {
+                appState.parentFeedbackList.unshift({ text: text.trim(), date: new Date().toLocaleString() });
+                saveAppState();
+                renderAll();
+                document.getElementById("parentFeedbackInput").value = "";
+                alert("感谢您的协同反馈！");
+            } else alert("请填写观察记录");
+        });
+        document.getElementById("refreshProjectList").addEventListener("click", () => renderAll());
     };
-
-    function escapeHtml(str) { if (!str) return ''; return str.replace(/[&<>]/g, m => ({ '&':'&amp;', '<':'&lt;', '>':'&gt;' }[m])); }
-
-    // 初始化入口
-    loadLocalState();
-    bindEvalButtons();
 </script>
 </body>
 </html>
