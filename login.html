@@ -1,0 +1,119 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>登录 - OMO社区编程空间</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Inter', system-ui, sans-serif;
+        }
+        body {
+            background: linear-gradient(145deg, #eef2f9 0%, #dce5f0 100%);
+            min-height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+        .login-card {
+            background: white;
+            border-radius: 48px;
+            padding: 48px 40px;
+            width: 90%;
+            max-width: 480px;
+            box-shadow: 0 20px 35px rgba(0,0,0,0.1);
+            text-align: center;
+            transition: 0.3s;
+        }
+        h1 {
+            font-size: 2rem;
+            background: linear-gradient(135deg, #1e5a7d, #4A90E2);
+            -webkit-background-clip: text;
+            background-clip: text;
+            color: transparent;
+            margin-bottom: 12px;
+        }
+        .sub {
+            color: #5a6874;
+            margin-bottom: 32px;
+        }
+        input {
+            width: 100%;
+            padding: 16px 20px;
+            margin: 16px 0;
+            border-radius: 60px;
+            border: 1px solid #cbd5e1;
+            font-size: 1rem;
+            outline: none;
+            transition: 0.2s;
+        }
+        input:focus {
+            border-color: #4A90E2;
+            box-shadow: 0 0 0 3px rgba(74,144,226,0.2);
+        }
+        button {
+            background: #4A90E2;
+            color: white;
+            border: none;
+            padding: 14px 28px;
+            border-radius: 60px;
+            font-size: 1.1rem;
+            font-weight: 600;
+            cursor: pointer;
+            width: 100%;
+            transition: 0.2s;
+        }
+        button:hover {
+            background: #3a7bca;
+            transform: scale(0.98);
+        }
+        .error {
+            color: #e74c3c;
+            margin-top: 16px;
+            font-size: 0.9rem;
+        }
+        .demo-note {
+            margin-top: 32px;
+            font-size: 0.8rem;
+            color: #6c757d;
+        }
+    </style>
+</head>
+<body>
+<div class="login-card">
+    <h1>🌈 OMO 社区编程空间</h1>
+    <div class="sub">输入姓名，开始你的学习之旅</div>
+    <input type="text" id="studentName" placeholder="例如：李明轩" autocomplete="off">
+    <button id="loginBtn">进入学习空间 🚀</button>
+    <div id="errorMsg" class="error"></div>
+    <div class="demo-note">
+        💡 所有课程进度、学分、作品将独立保存。<br>
+        教师、家长评价也会跟随账号。
+    </div>
+</div>
+<script>
+    const loginBtn = document.getElementById('loginBtn');
+    const nameInput = document.getElementById('studentName');
+    const errorMsg = document.getElementById('errorMsg');
+
+    loginBtn.addEventListener('click', () => {
+        const rawName = nameInput.value.trim();
+        if (rawName === "") {
+            errorMsg.innerText = "姓名不能为空";
+            return;
+        }
+        // 存储登录用户
+        localStorage.setItem('loggedInUser', rawName);
+        // 跳转到主系统
+        window.location.href = 'index.html';
+    });
+
+    nameInput.addEventListener('keypress', (e) => {
+        if (e.key === 'Enter') loginBtn.click();
+    });
+</script>
+</body>
+</html>
