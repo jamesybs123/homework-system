@@ -69,6 +69,89 @@
         @media (max-width: 900px) { .two-columns { grid-template-columns: 1fr; } .lessons-grid { grid-template-columns: 1fr; } }
         .parent-mode-badge { background: #f59e0b; color: white; border-radius: 40px; padding: 4px 12px; font-size: 0.75rem; display: inline-flex; align-items: center; gap: 6px; margin-left: 8px; }
         .logout-parent-btn { background: none; border: none; color: white; cursor: pointer; font-size: 0.7rem; text-decoration: underline; margin-left: 6px; }
+        
+        /* 积分榜样式 */
+        .leaderboard-wrapper {
+            margin-top: 28px;
+            background: #fff7e8;
+            border-radius: 28px;
+            padding: 20px;
+            border: 1px solid #ffe0a3;
+            box-shadow: 0 6px 14px rgba(0,0,0,0.04);
+        }
+        .leaderboard-header {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            margin-bottom: 18px;
+            border-bottom: 2px dashed #ffdd99;
+            padding-bottom: 10px;
+        }
+        .leaderboard-header i {
+            font-size: 28px;
+            color: #f5a623;
+        }
+        .leaderboard-header span {
+            font-size: 1.3rem;
+            font-weight: 700;
+            color: #c47e00;
+        }
+        .rank-list {
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+        }
+        .rank-item {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            background: white;
+            padding: 10px 18px;
+            border-radius: 48px;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.03);
+            transition: all 0.2s;
+            border: 1px solid #ffefcf;
+        }
+        .rank-number {
+            font-size: 1.3rem;
+            font-weight: 800;
+            width: 48px;
+            text-align: center;
+        }
+        .rank-number.gold { color: #f5b81b; text-shadow: 0 1px 1px rgba(0,0,0,0.1); }
+        .rank-number.silver { color: #a0a0a0; }
+        .rank-number.bronze { color: #cd7f32; }
+        .rank-avatar {
+            width: 38px;
+            height: 38px;
+            background: #fef0e0;
+            border-radius: 38px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: bold;
+            color: #dd8c20;
+            margin: 0 10px;
+        }
+        .rank-info {
+            flex: 2;
+            font-weight: 600;
+            color: #3f3a2e;
+        }
+        .rank-credits {
+            background: #ffefcf;
+            padding: 4px 16px;
+            border-radius: 30px;
+            font-weight: 700;
+            color: #b45f06;
+            font-size: 0.9rem;
+        }
+        .empty-rank {
+            text-align: center;
+            padding: 30px;
+            color: #b48c48;
+            font-style: italic;
+        }
     </style>
 </head>
 <body>
@@ -110,6 +193,18 @@
             <div id="assignmentArea"></div>
             <div class="card-header" style="margin-top: 20px;"><span class="card-title"><i class="fas fa-medal"></i> 🏅 勋章墙 (全部展示)</span></div>
             <div id="badgesContainer" class="badges-grid"></div>
+            
+            <!-- 积分榜 - 仅放置于勋章墙下方，不改变任何原有内容和位置 -->
+            <div class="leaderboard-wrapper" id="leaderboardContainer">
+                <div class="leaderboard-header">
+                    <i class="fas fa-chart-line"></i>
+                    <span>🏆 社区学分榜 · 小创客之星 TOP 5</span>
+                </div>
+                <div id="leaderboardList">
+                    <div class="empty-rank">✨ 加载学分排名中...</div>
+                </div>
+                <div style="font-size:0.7rem; text-align:right; margin-top: 8px; color:#bb8822;">⭐ 学分越高，榜位越高！持续完成课程/作业可提升学分</div>
+            </div>
         </div>
     </div>
 
@@ -499,6 +594,43 @@
         return isTeacherMode || isParentMode;
     }
 
+    // 积分榜核心：基于学分生成前5名（动态展示当前学员 + 4位激励性虚拟学员）
+    function getLeaderboardData() {
+        let currentUser = { name: "🌟 小学员 (我)", credits: appState.credits, isSelf: true };
+        let mockOthers = [
+            { name: "🐱 编程小行家", credits: Math.min(320, Math.max(165, appState.credits + 45)), isSelf: false },
+            { name: "🤖 算法新星", credits: Math.min(280, Math.max(140, appState.credits + 28)), isSelf: false },
+            { name: "🎨 创意画师", credits: Math.min(215, Math.max(95, appState.credits + 18)), isSelf: false },
+            { name: "🚀 未来极客", credits: Math.min(190, Math.max(70, appState.credits + 8)), isSelf: false }
+        ];
+        let all = [currentUser, ...mockOthers];
+        all.sort((a,b) => b.credits - a.credits);
+        return all.slice(0,5);
+    }
+
+    function renderLeaderboard() {
+        const ranking = getLeaderboardData();
+        const container = document.getElementById("leaderboardList");
+        if (!container) return;
+        if (ranking.length === 0) { container.innerHTML = '<div class="empty-rank">📭 暂无学分数据，快来完成课程赢得学分！</div>'; return; }
+        let html = '';
+        ranking.forEach((user, idx) => {
+            let rankCls = '';
+            if (idx === 0) rankCls = 'gold';
+            else if (idx === 1) rankCls = 'silver';
+            else if (idx === 2) rankCls = 'bronze';
+            html += `
+                <div class="rank-item" style="${user.isSelf ? 'border: 2px solid #ffe1a0; background:#fffef5;' : ''}">
+                    <div class="rank-number ${rankCls}">${idx+1}</div>
+                    <div class="rank-avatar"><i class="fas ${user.isSelf ? 'fa-user-graduate' : 'fa-user-astronaut'}"></i></div>
+                    <div class="rank-info">${user.name} ${user.isSelf ? '<span style="font-size:0.7rem; background:#ffedd5; padding:2px 8px; border-radius:20px; margin-left:6px;">🏃‍♂️ 继续冲刺</span>' : ''}</div>
+                    <div class="rank-credits">🏅 ${user.credits} 学分</div>
+                </div>
+            `;
+        });
+        container.innerHTML = html;
+    }
+
     async function renderAll() {
         const allProjects = await getAllProjectsMeta();
         const studentProjects = allProjects.filter(p => p.fileType === 'student' && !p.isDemo);
@@ -520,7 +652,7 @@
         const rate = totalLessons === 0 ? 0 : Math.round((completedLessons / totalLessons) * 100);
         document.getElementById("completionRate").innerText = rate + "%";
         
-        // ========== 课程列表渲染 ==========
+        // 课程列表渲染（保持原有逻辑）
         let courseHtml = `<div><strong>${course.title}</strong>
             <div class="progress-bar"><div class="progress-fill" style="width: ${rate}%;"></div></div>
             <div>总进度: ${completedLessons}/${totalLessons} 课时</div>
@@ -564,7 +696,7 @@
         courseHtml += `</div>`;
         document.getElementById("courseList").innerHTML = courseHtml;
         
-        // ========== 编程作业区 ==========
+        // 编程作业区（保持原样）
         let assignHtml = `<div><strong>教师案例作业</strong> (教师上传案例，学生模仿后提交)</div>`;
         if (isTeacherMode) assignHtml += `<button id="uploadCaseBtn" class="btn-sm" style="background:#10b981; margin-bottom:12px;">📤 上传新案例作业</button>`;
         for (let i = 0; i < teacherCases.length; i++) {
@@ -600,7 +732,7 @@
         if (teacherCases.length === 0) assignHtml += `<div style="color:#aaa; text-align:center; padding:20px;">暂无教师案例，请教师先上传案例作业</div>`;
         document.getElementById("assignmentArea").innerHTML = assignHtml;
         
-        // ========== 所有学生作品总览（教师可见） ==========
+        // 作品总览（教师模式）
         const allWorks = [...assignmentWorks, ...studentCaseSubmissions, ...studentProjects];
         const overviewDiv = document.getElementById("allWorksOverview");
         if (overviewDiv) {
@@ -626,7 +758,7 @@
             }
         }
         
-        // ========== 勋章墙 ==========
+        // 勋章墙
         let badgesHtml = "";
         for (let b of badgesList) {
             const earnedClass = b.earned ? "earned" : "";
@@ -634,7 +766,7 @@
         }
         document.getElementById("badgesContainer").innerHTML = badgesHtml;
         
-        // ========== 学分银行 ==========
+        // 学分银行
         const { courseCredits, assignmentCredits, projectCredits, otherCredits } = getCreditBreakdown();
         const compositionHtml = `<div class="credit-composition">
             <div class="credit-composition-item"><div>📖 课程学分</div><div>${courseCredits}</div></div>
@@ -653,7 +785,7 @@
         let logsHtml = `<div><strong>📜 学分流水</strong><div style="max-height:150px; overflow-y:auto;">` + (appState.creditLogs.length === 0 ? `<div>暂无记录</div>` : appState.creditLogs.slice(0,8).map(log => `<div class="credit-log">${new Date(log.date).toLocaleString()} — ${log.reason}</div>`).join('')) + `</div></div>`;
         document.getElementById("creditSummary").innerHTML = `<div><strong>🏦 当前总学分: ${appState.credits}</strong></div>${compositionHtml}${lessonDetailHtml}${logsHtml}`;
         
-        // ========== 双轨评价统计 ==========
+        // 双轨评价统计
         const allEvaluableWorks = allProjects.filter(p => !p.isDemo && (p.fileType === 'assignment' || p.fileType === 'student_case' || p.fileType === 'student'));
         const teacherEvaluatedCount = allEvaluableWorks.filter(w => w.teacherScore !== null && w.teacherScore !== undefined).length;
         const parentFeedbackCount = allEvaluableWorks.filter(w => w.parentComment && w.parentComment.trim() !== "").length;
@@ -681,44 +813,23 @@
         const recentHtml = allFeedbacks.slice(0,10).map(f => `<div class="feedback-item"><i class="fas ${f.type === 'teacher' ? 'fa-chalkboard-teacher' : 'fa-user-friends'}"></i> ${f.text}</div>`).join('');
         document.getElementById("recentFeedbacks").innerHTML = recentHtml || "<div>暂无评价动态</div>";
         
-        // ========== 事件绑定（避免重复绑定，使用一次性绑定） ==========
-        // 注意：这里不能简单重新绑定所有，因为 renderAll 会被多次调用。我们使用事件委托或每次清理旧监听。
-        // 为了避免复杂，我们使用全局事件委托，基于 document 监听动态元素。
-        // 但为了兼容之前的代码，我们手动解除并重新绑定主要按钮。为简化，我们重新绑定所有动态按钮（会覆盖旧监听，但不会重复累积）
+        // 积分榜刷新
+        renderLeaderboard();
         bindDynamicEvents();
     }
     
-    // 提取事件绑定函数，避免重复绑定
+    // 事件绑定（保持原有全部功能）
     function bindDynamicEvents() {
-        // 使用事件委托，避免重复绑定每个按钮
-        document.querySelectorAll(".download-attach").forEach(btn => {
-            btn.replaceWith(btn.cloneNode(true));
-        });
-        document.querySelectorAll(".delete-attach").forEach(btn => {
-            btn.replaceWith(btn.cloneNode(true));
-        });
-        document.querySelectorAll(".upload-lesson-attach").forEach(btn => {
-            btn.replaceWith(btn.cloneNode(true));
-        });
-        document.querySelectorAll(".grade-save-btn").forEach(btn => {
-            btn.replaceWith(btn.cloneNode(true));
-        });
-        document.querySelectorAll(".delete-grade").forEach(btn => {
-            btn.replaceWith(btn.cloneNode(true));
-        });
-        document.querySelectorAll(".parent-save-btn").forEach(btn => {
-            btn.replaceWith(btn.cloneNode(true));
-        });
-        document.querySelectorAll(".delete-parent-comment").forEach(btn => {
-            btn.replaceWith(btn.cloneNode(true));
-        });
-        document.querySelectorAll(".assignment-upload-btn").forEach(btn => {
-            btn.replaceWith(btn.cloneNode(true));
-        });
-        document.querySelectorAll(".student-case-upload").forEach(btn => {
-            btn.replaceWith(btn.cloneNode(true));
-        });
-        // 重新绑定
+        document.querySelectorAll(".download-attach").forEach(btn => { btn.replaceWith(btn.cloneNode(true)); });
+        document.querySelectorAll(".delete-attach").forEach(btn => { btn.replaceWith(btn.cloneNode(true)); });
+        document.querySelectorAll(".upload-lesson-attach").forEach(btn => { btn.replaceWith(btn.cloneNode(true)); });
+        document.querySelectorAll(".grade-save-btn").forEach(btn => { btn.replaceWith(btn.cloneNode(true)); });
+        document.querySelectorAll(".delete-grade").forEach(btn => { btn.replaceWith(btn.cloneNode(true)); });
+        document.querySelectorAll(".parent-save-btn").forEach(btn => { btn.replaceWith(btn.cloneNode(true)); });
+        document.querySelectorAll(".delete-parent-comment").forEach(btn => { btn.replaceWith(btn.cloneNode(true)); });
+        document.querySelectorAll(".assignment-upload-btn").forEach(btn => { btn.replaceWith(btn.cloneNode(true)); });
+        document.querySelectorAll(".student-case-upload").forEach(btn => { btn.replaceWith(btn.cloneNode(true)); });
+        
         document.querySelectorAll(".download-attach").forEach(btn => btn.addEventListener("click", async (e) => {
             const id = parseInt(btn.dataset.id);
             const record = await getFileDataById(id);
@@ -882,7 +993,6 @@
         if (isTeacherMode) {
             teacherBtn.innerHTML = '<i class="fas fa-sign-out-alt"></i> 退出教师模式';
             teacherBtn.onclick = () => { logoutTeacher(); };
-            // 教师模式下隐藏家长登录按钮（教师可直接填写家长评价）
             parentBtn.style.display = "none";
         } else {
             teacherBtn.innerHTML = '<i class="fas fa-chalkboard-teacher"></i> 教师管理';
@@ -908,7 +1018,6 @@
                 renderAll();
             } else alert(`学分不足20`);
         });
-        // 刷新按钮事件（如果存在）
         const refreshBtn = document.getElementById("refreshProjectList");
         if (refreshBtn) refreshBtn.addEventListener("click", () => renderAll());
     };
