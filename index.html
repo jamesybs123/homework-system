@@ -428,7 +428,9 @@
 
     async function renderAll() {
         const allProjects = await getAllProjectsMeta();
-        const studentProjects = allProjects.filter(p => p.fileType === 'student' && !p.isDemo);
+        const studentProjects = allProjects.filter(p => 
+    (p.fileType === 'assignment' || p.fileType === 'student_case' || p.fileType === 'student') && !p.isDemo
+);
         const teacherCases = allProjects.filter(p => p.fileType === 'case' && !p.isDemo);
         const studentCaseSubmissions = allProjects.filter(p => p.fileType === 'student_case' && !p.isDemo);
         const assignmentWorks = allProjects.filter(p => p.fileType === 'assignment' && !p.isDemo);
