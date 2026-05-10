@@ -369,7 +369,7 @@
 
     async function computeBadges() {
         const allProjects = await getAllProjectsMeta();
-        const studentProjects = allProjects.filter(p => p.fileType === 'student' && !p.isDemo);
+        const studentProjects = allProjects.filter(p => (p.fileType === 'assignment' || p.fileType === 'student_case' || p.fileType === 'student') && !p.isDemo);
         const assignmentProjects = allProjects.filter(p => p.fileType === 'assignment' && !p.isDemo);
         const studentCaseProjects = allProjects.filter(p => p.fileType === 'student_case' && !p.isDemo);
         const ctx = {
